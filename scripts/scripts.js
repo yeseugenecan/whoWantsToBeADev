@@ -26,6 +26,7 @@ app.level = 0;
 app.questions = [];
 app.correctAnswers = [];
 app.incorrectAnswers = [];
+app.randomizedAnswers = [];
 
 app.getQuestions = (difficulty) => {
     return $.ajax({
@@ -43,14 +44,15 @@ async function getData() {
         app.correctAnswers.push(arrayItem.correct_answer);
         app.incorrectAnswers.push(arrayItem.incorrect_answers)
     })
+    console.log(app.questions)
+    app.loadNextQuestion(app.questions[0], app.correctAnswers[0], app.incorrectAnswers[0]);
 }
-console.log(app.questions[0], app.correctAnswers, app.incorrectAnswers)
+
 getData();
 
 app.randomizeAnswers = (correct, wrongAnswer) => {
-    // const allAnswers = wrongAnswer.concat(correct);
-    console.log(correct, wrongAnswer)
-    // return shuffle(allAnswers);
+    const allAnswers = wrongAnswer.concat(correct);
+    return app.shuffle(allAnswers);
 }
 
 // from https://bost.ocks.org/mike/shuffle/
@@ -68,7 +70,32 @@ app.shuffle = (array) => {
     return array;
 }
 
-console.log(app.randomizeAnswers(app.correctAnswers[0], app.incorrectAnswers[0]))
+app.loadNextQuestion = (question, correct, wrong) =>{
+    let randomized = app.randomizeAnswers(correct, wrong);
+    console.log(randomized);
+    let frame = `<h2>${question}</h2>
+            <form action="">
+                <div class="answers">
+                    <div class="answer">
+                        <input type="radio" id="answer1" name="answers" value="lorem">
+                        <label for="answer1">A. <span>${randomized[0]}</span></label>
+                    </div>
+                    <div class="answer">
+                        <input type="radio" id="answer2" name="answers" value="lorem">
+                        <label for="answer1">B. <span>${randomized[1]}</span></label>
+                    </div>
+                    <div class="answer">
+                        <input type="radio" id="answer3" name="answers" value="lorem">
+                        <label for="answer1">C. <span>${randomized[2]}</span></label>
+                    </div>
+                    <div class="answer">
+                        <input type="radio" id="answer4" name="answers" value="lorem">
+                        <label for="answer1">D. <span>${randomized[3]}</span></label>
+                    </div>
+                </div>
+            </form>`
+    $('.question').html(frame);
+}
 
 
 app.init = () => {
