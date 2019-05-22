@@ -1,4 +1,4 @@
 .DS_Store
 design-files/
-.css.map
+*.css.map
 prepros-6.config
