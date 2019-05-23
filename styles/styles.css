@@ -382,4 +382,12 @@ button {
 button:hover, button:focus {
   background-color: #239f9e;
 }
+
+.loading {
+  background-color: #888;
+}
+
+.loading:hover, .loading:focus {
+  background-color: #888;
+}
 /*# sourceMappingURL=styles.css.map */

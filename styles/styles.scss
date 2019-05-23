@@ -164,3 +164,12 @@ button {
         background-color: darken( #50d8d7, 20%);
     }
 }
+.loading {
+    background-color: #888;
+
+    &:hover,
+    &:focus {
+        background-color: #888;
+     }
+
+}

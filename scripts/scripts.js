@@ -1,6 +1,3 @@
-// HELLLO CAN
-// NICE
-
 // create an object called theGame
 // Make 3 different API calls to fetch 15 questions in varying difficulties.
 // Store these questions in an array of objects.
@@ -47,11 +44,7 @@ async function getData() {
         app.correctAnswers.push(arrayItem.correct_answer);
         app.incorrectAnswers.push(arrayItem.incorrect_answers)
     })
-    app.loadStartScreen();
-    // $("main").on('click', '.begin', function(){
-    //     app.loadNextQuestion(app.questions, app.correctAnswers, app.incorrectAnswers);
-    //     $(`ul li:nth-child(${app.level})`).css({ "color": "white", "font-size": "1.2rem", "opacity": "1"})
-    // })
+    app.loadStartButton();
 }
 
 app.randomizeAnswers = (correct, wrongAnswer) => {
@@ -101,23 +94,17 @@ app.loadNextQuestion = (question, correct, wrong) =>{
             <button>Submit <i class="fas fa-long-arrow-alt-right"></i></button>`
     $('.question').html(frame);
 }
-app.loadStartScreen = () => {
-    // let frame =
-    //     `<div class="question">
-    //             <h2> Who wants to be a developer</h2>
-    //             <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Officia dolores reprehenderit, facere quibusdam nihil modi error quia odio cumque minus!</p>
-    //             <button class="begin">Begin</button
-    //         </div>`
-    // $('main').html(frame);
+app.loadStartButton = () => {
     $('button').on('click', (e)=> {
         e.preventDefault();
+        
         app.loadNextQuestion(app.questions, app.correctAnswers, app.incorrectAnswers);
         
 
         
 
     })
-    $('button').text('Begin');
+    $('button').html('Begin <i class="fas fa-long-arrow-alt-right"></i>').toggleClass('loading');
 }
 
 
