@@ -27,6 +27,7 @@ app.questions = [];
 app.correctAnswers = [];
 app.incorrectAnswers = [];
 app.randomizedAnswers = [];
+app.randomIndex;
 
 app.getQuestions = (difficulty) => {
     return $.ajax({
@@ -35,86 +36,106 @@ app.getQuestions = (difficulty) => {
         dataType: `json`
     });
 }
-
-app.getData = async function() {
-    const data = await app.getQuestions('medium');
-    const arrayOfQuestions = data.results;
-    arrayOfQuestions.forEach((arrayItem) => {
-        app.questions.push(arrayItem.question);
-        app.correctAnswers.push(arrayItem.correct_answer);
-        app.incorrectAnswers.push(arrayItem.incorrect_answers);
-    })
-    app.loadStartButton();
-}
-
 app.randomizeAnswers = (correct, wrongAnswer) => {
-    const allAnswers = wrongAnswer.concat(correct);
-    return app.shuffle(allAnswers);
+    app.randomIndex = Math.floor(Math.random() * 4);
+    const allAnswers = wrongAnswer;
+    allAnswers.splice(app.randomIndex, 0, correct);
+    return allAnswers;
 }
 
 // from https://bost.ocks.org/mike/shuffle/
-app.shuffle = (array) => {
-    let m = array.length, t, i;
-    // While there remain elements to shuffle…
-    while (m) {
-        // Pick a remaining element…
-        i = Math.floor(Math.random() * m--);
-        // And swap it with the current element.
-        t = array[m];
-        array[m] = array[i];
-        array[i] = t;
-    }
-    return array;
+// app.shuffle = (array) => {
+//     let m = array.length, t, i;
+//     // While there remain elements to shuffle…
+//     while (m) {
+//         // Pick a remaining element…
+//         i = Math.floor(Math.random() * m--);
+//         // And swap it with the current element.
+//         t = array[m];
+//         array[m] = array[i];
+//         array[i] = t;
+//     }
+//     return array;
+// }
+
+
+app.loadStartButton = () => {
+    $('button').html('Begin <i class="fas fa-long-arrow-alt-right"></i>').toggleClass('loading');
+    $('button').on('click', (e) => {
+        e.preventDefault();
+
+        app.loadNextQuestion(app.questions, app.correctAnswers, app.incorrectAnswers);
+
+
+    })
 }
 
-app.loadNextQuestion = (question, correct, wrong) =>{
-    let randomized = app.randomizeAnswers(correct[app.level - 1], wrong[app.level-1]);
-    let frame = `<h2>${question[app.level - 1]}</h2>
+app.loadNextQuestion = (question, correct, wrong) => {
+    let randomized = app.randomizeAnswers(correct[app.level], wrong[app.level]);
+    let frame = `<h2>${question[app.level]}</h2>
             <form action="">
                 <div class="answers">
                     <div class="answer">
-                        <input type="radio" id="answer1" name="answers" value="${randomized[0]}">
+                        <input type="radio" id="answer1" name="answers" value="0">
                         <label for="answer1">A. <span>${randomized[0]}</span></label>
                     </div>
                     <div class="answer">
-                        <input type="radio" id="answer2" name="answers" value="${randomized[1]}">
+                        <input type="radio" id="answer2" name="answers" value="1">
                         <label for="answer2">B. <span>${randomized[1]}</span></label>
                     </div>
                     <div class="answer">
-                        <input type="radio" id="answer3" name="answers" value="${randomized[2]}">
+                        <input type="radio" id="answer3" name="answers" value="2">
                         <label for="answer3">C. <span>${randomized[2]}</span></label>
                     </div>
                     <div class="answer">
-                        <input type="radio" id="answer4" name="answers" value="${randomized[3]}">
+                        <input type="radio" id="answer4" name="answers" value="3">
                         <label for="answer4">D. <span>${randomized[3]}</span></label>
                     </div>
                 </div>
             </form>
             <button>Submit <i class="fas fa-long-arrow-alt-right"></i></button>`
     $('.question').html(frame);
-    app.level++;
-}
-app.verifyAnswer = () =>{
-    $('button').on('click')
-    let userAnswer = $("input[name=answers]:checked").val();
-    console.log(userAnswer);
-
+    $(`ul li:nth-child(${app.level + 1})`).css({"opacity": "1"});
+    $(`ul li:nth-child(${app.level})`).css({ "opacity": "0.2" });
+    
 }
 
-app.loadStartButton = () => {
-    $('button').html('Begin <i class="fas fa-long-arrow-alt-right"></i>').toggleClass('loading');
-    $('button').on('click', (e)=> {
-        e.preventDefault();
-        
-        app.loadNextQuestion(app.questions, app.correctAnswers, app.incorrectAnswers);
-        
+
+app.verifyAnswer = () => {
+    $('.question').on('click', 'button', ()=>{
+        let userAnswer = $("input[name=answers]:checked").val();
+        console.log(`correct answer was: ${app.correctAnswers[app.level]}`);
+        if (app.randomIndex === parseInt(userAnswer, 10)){
+            console.log("correct");
+            app.level++;
+            app.loadNextQuestion(app.questions, app.correctAnswers, app.incorrectAnswers);
+        }
+        else{
+            $('.question').html(`<h2>GAME OVER BRAH!</h2>`)
+        }
 
     })
+
 }
+
+app.getData = async function() {
+    const data = await app.getQuestions('easy');
+    const arrayOfQuestions = data.results;
+    arrayOfQuestions.forEach((arrayItem) => {
+        app.questions.push(arrayItem.question);
+        app.correctAnswers.push(arrayItem.correct_answer);
+        app.incorrectAnswers.push(arrayItem.incorrect_answers);
+    })
+    console.log(app.questions);
+    app.loadStartButton();
+    
+}
+
 
 
 app.init = () => {
     app.getData();
+    app.verifyAnswer();
 }
 
 
