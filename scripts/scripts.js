@@ -45,13 +45,11 @@ async function getData() {
         app.incorrectAnswers.push(arrayItem.incorrect_answers)
     })
     app.loadStartScreen();
-    $("main").on('click', '.begin', function(){
-        app.loadNextQuestion(app.questions, app.correctAnswers, app.incorrectAnswers);
-        $(`ul li:nth-child(${app.level})`).css({ "color": "white", "font-size": "1.2rem", "opacity": "1"})
-    })
+    // $("main").on('click', '.begin', function(){
+    //     app.loadNextQuestion(app.questions, app.correctAnswers, app.incorrectAnswers);
+    //     $(`ul li:nth-child(${app.level})`).css({ "color": "white", "font-size": "1.2rem", "opacity": "1"})
+    // })
 }
-
-getData();
 
 app.randomizeAnswers = (correct, wrongAnswer) => {
     const allAnswers = wrongAnswer.concat(correct);
@@ -101,21 +99,33 @@ app.loadNextQuestion = (question, correct, wrong) =>{
     $('.question').html(frame);
 }
 app.loadStartScreen = () => {
-    let frame =
-        `<div class="question">
-                <h2> Who wants to be a developer</h2>
-                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Officia dolores reprehenderit, facere quibusdam nihil modi error quia odio cumque minus!</p>
-                <button class="begin">Begin</button
-            </div>`
-    $('main').html(frame);
+    // let frame =
+    //     `<div class="question">
+    //             <h2> Who wants to be a developer</h2>
+    //             <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Officia dolores reprehenderit, facere quibusdam nihil modi error quia odio cumque minus!</p>
+    //             <button class="begin">Begin</button
+    //         </div>`
+    // $('main').html(frame);
+    $('button').on('click', (e)=> {
+        e.preventDefault();
+        app.loadNextQuestion(app.questions, app.correctAnswers, app.incorrectAnswers);
+        
+
+        
+
+    })
+    $('button').text('Begin');
 }
 
 
 app.init = () => {
+    getData();
+    console.log(app.questions);
 }
 
 
 $(function () {
     app.init();
+    console.log(app.questions);
 
 });
