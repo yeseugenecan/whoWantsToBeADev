@@ -73,6 +73,7 @@ app.loadStartButton = () => {
 app.loadNextQuestion = (question, correct, wrong) => {
     let randomized = app.randomizeAnswers(correct[app.level], wrong[app.level]);
     app.makeTimer(15);
+    console.log(`correct answer is: ${app.correctAnswers[app.level]}`);
     let frame = `<h2>${question[app.level]}</h2>
             <form action="">
                 <div class="answers">
@@ -105,7 +106,6 @@ app.loadNextQuestion = (question, correct, wrong) => {
 app.verifyAnswer = () => {
     $('.question').on('click', 'button', ()=>{
         let userAnswer = $("input[name=answers]:checked").val();
-        console.log(`correct answer was: ${app.correctAnswers[app.level]}`);
         if (app.randomIndex === parseInt(userAnswer, 10)){
             console.log("correct");
             app.level++;
@@ -176,13 +176,13 @@ app.getData = async function() {
     const easyQuestions = await app.getQuestions('easy');
     const mediumQuestions = await app.getQuestions('medium');
     const hardQuestions = await app.getQuestions('hard');
-    const arrayOfQuestions = data.results;
+    const arrayOfQuestions = ((easyQuestions.results).concat(mediumQuestions.results)).concat(hardQuestions.results);
     arrayOfQuestions.forEach((arrayItem) => {
         app.questions.push(arrayItem.question);
         app.correctAnswers.push(arrayItem.correct_answer);
         app.incorrectAnswers.push(arrayItem.incorrect_answers);
     })
-    console.log(app.questions);
+    // console.log(app.questions);
     app.loadStartButton();
     
 }
