@@ -20,6 +20,15 @@
 
 // if user selects a wrong answer, then show the correct answer and display game over and their final score.
 
+
+// Document Ready
+// App.init
+// App.getdata
+// App.loadstartbutton
+// app.loadwidget and app.loadnextquestion
+// 
+//
+
 const app = {};
 
 app.level = 0;
@@ -109,6 +118,7 @@ app.gameOver = () => {
 
 app.resetGame = () => {
     $('.question').on('click', '.reset', () => {
+        $('.question').off();
         app.loadStartScreen();
         app.level = 0;
         app.questions = [];
@@ -117,6 +127,7 @@ app.resetGame = () => {
         app.randomizedAnswers = [];
         app.randomIndex;
         app.init();
+        // app.getData();
     })
 }
 app.loadStartScreen = () =>{
@@ -178,6 +189,7 @@ app.loadWidget = () => {
             <div class="countdown"><p>60</p></div>
         </div>
         <button class="fiftyfifty">fifty fifty</button>
+        <button class="messageFriend">Message Friend</button>
     `)
 }
 
@@ -191,12 +203,18 @@ app.indicesToRemove = () => {
     return dummyArray
 }
 app.fiftyFifty = () =>{
-    $('.widgets').on('click', 'button', ()=>{
-        indicesToRemove = app.indicesToRemove();
+    $('.widgets').on('click', '.fiftyfifty', ()=>{
+        let indicesToRemove = app.indicesToRemove();
+        console.log(indicesToRemove)
         $(`.answer:nth-child(${indicesToRemove[0]+1})`).empty();
         $(`.answer:nth-child(${indicesToRemove[1]+1})`).empty();
         // $(`.answer:nth-child(${indicesToRemove[1]}+1)`).empty();
+        $('.fiftyfifty').addClass('usedLifeline').removeClass('fiftyfifty');
+        $('.widgets').off();
     })
+}
+app.messageFriend = () =>{
+
 }
 
 
