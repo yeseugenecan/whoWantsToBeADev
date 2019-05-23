@@ -44,8 +44,11 @@ async function getData() {
         app.correctAnswers.push(arrayItem.correct_answer);
         app.incorrectAnswers.push(arrayItem.incorrect_answers)
     })
-    console.log(app.questions)
-    app.loadNextQuestion(app.questions[0], app.correctAnswers[0], app.incorrectAnswers[0]);
+    app.loadStartScreen();
+    $("main").on('click', '.begin', function(){
+        app.loadNextQuestion(app.questions, app.correctAnswers, app.incorrectAnswers);
+        $(`ul li:nth-child(${app.level})`).css({ "color": "white", "font-size": "1.2rem", "opacity": "1"})
+    })
 }
 
 getData();
@@ -71,9 +74,9 @@ app.shuffle = (array) => {
 }
 
 app.loadNextQuestion = (question, correct, wrong) =>{
-    let randomized = app.randomizeAnswers(correct, wrong);
-    console.log(randomized);
-    let frame = `<h2>${question}</h2>
+    app.level++;
+    let randomized = app.randomizeAnswers(correct[app.level - 1], wrong[app.level-1]);
+    let frame = `<h2>${question[app.level - 1]}</h2>
             <form action="">
                 <div class="answers">
                     <div class="answer">
@@ -93,8 +96,18 @@ app.loadNextQuestion = (question, correct, wrong) =>{
                         <label for="answer4">D. <span>${randomized[3]}</span></label>
                     </div>
                 </div>
-            </form>`
+            </form>
+            <button>Submit <i class="fas fa-long-arrow-alt-right"></i></button>`
     $('.question').html(frame);
+}
+app.loadStartScreen = () => {
+    let frame =
+        `<div class="question">
+                <h2> Who wants to be a developer</h2>
+                <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit. Officia dolores reprehenderit, facere quibusdam nihil modi error quia odio cumque minus!</p>
+                <button class="begin">Begin</button
+            </div>`
+    $('main').html(frame);
 }
 
 
