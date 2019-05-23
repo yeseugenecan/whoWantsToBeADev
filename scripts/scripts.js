@@ -115,7 +115,39 @@ app.verifyAnswer = () => {
         }
 
     })
+}
+app.makeTimTer = (seconds) => {
 
+    //declare jquery selectors for better performance
+    $countdown = $(".countdown");
+    $progressBar = $(".progress-bar");
+
+    //display the initial time remaining on page
+    $countdown.html(`${timeLeft} seconds remaining`);
+    //define the width of the initial progress bar as 100;
+    let progressWidth = 100;
+    //set the width increment as a function of timeLeft.
+    let widthIncrement = progressWidth / timeLeft / 100
+    //define the setInterval function
+    let timer = setInterval(function () {
+        //reduce timeLeft in 0.01 second increments.
+        timeLeft = timeLeft - 1 / 100;
+        //reduce the width of the progress bar the size of the widthIncrement
+        progressWidth = progressWidth - widthIncrement;
+        //display timeLeft on the html
+        $countdown.html(`<p>${Math.round(timeLeft * 10) / 10}</p><p> seconds remaining </p>`);
+        ///update the width of the progress bar on html
+        $progressBar.width(`${progressWidth}%`);
+        //when timeLeft is less than 1 second, make seconds singular ie. second
+        if (timeLeft < 1) {
+            $countdown.html(`<p>${Math.round(timeLeft * 10) / 10}</p><p> second remaining </p>`);
+        }
+        //when width of the progress bar is zero, clearInterval and move to the next frame.
+        if (progressWidth <= 0) {
+            clearInterval(timer);
+            numberGame.makeFrameTwo();
+        }
+    }, 10);
 }
 
 app.getData = async function() {
