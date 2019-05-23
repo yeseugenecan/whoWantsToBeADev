@@ -312,6 +312,7 @@ main {
 .widgets {
   position: absolute;
   top: 20px;
+  width: 66%;
 }
 
 .answers {
@@ -389,5 +390,30 @@ button:hover, button:focus {
 
 .loading:hover, .loading:focus {
   background-color: #888;
+}
+
+.progressOuter {
+  width: 50%;
+  height: 30px;
+  border-radius: 10px;
+  border: solid 2px #f2f2f2;
+  -webkit-box-sizing: content-box;
+          box-sizing: content-box;
+  background: #f2f2f2;
+  position: relative;
+}
+
+.progressInner {
+  width: 100%;
+  height: 30px;
+  background: green;
+  border-radius: 10px;
+  border: solid 1px #1f1f2e;
+}
+
+.countdown {
+  position: absolute;
+  top: 0;
+  left: 50%;
 }
 /*# sourceMappingURL=styles.css.map */

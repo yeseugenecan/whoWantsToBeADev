@@ -63,7 +63,7 @@ app.loadStartButton = () => {
     $('button').html('Begin <i class="fas fa-long-arrow-alt-right"></i>').toggleClass('loading');
     $('button').on('click', (e) => {
         e.preventDefault();
-
+        app.loadWidget();
         app.loadNextQuestion(app.questions, app.correctAnswers, app.incorrectAnswers);
 
 
@@ -72,6 +72,7 @@ app.loadStartButton = () => {
 
 app.loadNextQuestion = (question, correct, wrong) => {
     let randomized = app.randomizeAnswers(correct[app.level], wrong[app.level]);
+    app.makeTimer(15);
     let frame = `<h2>${question[app.level]}</h2>
             <form action="">
                 <div class="answers">
@@ -111,19 +112,25 @@ app.verifyAnswer = () => {
             app.loadNextQuestion(app.questions, app.correctAnswers, app.incorrectAnswers);
         }
         else{
-            $('.question').html(`<h2>GAME OVER BRAH!</h2>`)
+            app.gameOver();
         }
 
     })
 }
-app.makeTimTer = (seconds) => {
+app.gameOver = () => {
+    $('.widgets').hide();
+    $('.question').html(`<h2>GAME OVER BRAH!</h2>`)
+    
+}
+
+app.makeTimer = (timeLeft) => {
 
     //declare jquery selectors for better performance
     $countdown = $(".countdown");
-    $progressBar = $(".progress-bar");
+    $progressBar = $(".progressInner");
 
     //display the initial time remaining on page
-    $countdown.html(`${timeLeft} seconds remaining`);
+    $countdown.html(`<p>${timeLeft}</p>`);
     //define the width of the initial progress bar as 100;
     let progressWidth = 100;
     //set the width increment as a function of timeLeft.
@@ -135,19 +142,34 @@ app.makeTimTer = (seconds) => {
         //reduce the width of the progress bar the size of the widthIncrement
         progressWidth = progressWidth - widthIncrement;
         //display timeLeft on the html
-        $countdown.html(`<p>${Math.round(timeLeft * 10) / 10}</p><p> seconds remaining </p>`);
+        $countdown.html(`<p>${Math.round(timeLeft)}</p>`);
         ///update the width of the progress bar on html
         $progressBar.width(`${progressWidth}%`);
         //when timeLeft is less than 1 second, make seconds singular ie. second
-        if (timeLeft < 1) {
-            $countdown.html(`<p>${Math.round(timeLeft * 10) / 10}</p><p> second remaining </p>`);
+        if (timeLeft < 10) {
+            $countdown.html(`<p>${Math.round(timeLeft * 10) / 10}</p>`);
         }
+        $('.question').on('click', 'button', () => {
+            clearInterval(timer);
+        });
         //when width of the progress bar is zero, clearInterval and move to the next frame.
         if (progressWidth <= 0) {
             clearInterval(timer);
-            numberGame.makeFrameTwo();
+            $('.progressOuter').hide();
+            app.gameOver();
+            // numberGame.makeFrameTwo();
         }
     }, 10);
+}
+
+app.loadWidget = () => {
+    $('.widgets').html(`
+        <div class="progressOuter">
+            <div class="progressInner">
+            </div> 
+            <div class="countdown"><p>60</p><div>
+        </div>
+    `)
 }
 
 app.getData = async function() {
