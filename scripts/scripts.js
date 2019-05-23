@@ -36,13 +36,13 @@ app.getQuestions = (difficulty) => {
     });
 }
 
-async function getData() {
+app.getData = async function() {
     const data = await app.getQuestions('medium');
     const arrayOfQuestions = data.results;
     arrayOfQuestions.forEach((arrayItem) => {
         app.questions.push(arrayItem.question);
         app.correctAnswers.push(arrayItem.correct_answer);
-        app.incorrectAnswers.push(arrayItem.incorrect_answers)
+        app.incorrectAnswers.push(arrayItem.incorrect_answers);
     })
     app.loadStartButton();
 }
@@ -68,54 +68,57 @@ app.shuffle = (array) => {
 }
 
 app.loadNextQuestion = (question, correct, wrong) =>{
-    app.level++;
     let randomized = app.randomizeAnswers(correct[app.level - 1], wrong[app.level-1]);
     let frame = `<h2>${question[app.level - 1]}</h2>
             <form action="">
                 <div class="answers">
                     <div class="answer">
-                        <input type="radio" id="answer1" name="answers" value="lorem">
+                        <input type="radio" id="answer1" name="answers" value="${randomized[0]}">
                         <label for="answer1">A. <span>${randomized[0]}</span></label>
                     </div>
                     <div class="answer">
-                        <input type="radio" id="answer2" name="answers" value="lorem">
+                        <input type="radio" id="answer2" name="answers" value="${randomized[1]}">
                         <label for="answer2">B. <span>${randomized[1]}</span></label>
                     </div>
                     <div class="answer">
-                        <input type="radio" id="answer3" name="answers" value="lorem">
+                        <input type="radio" id="answer3" name="answers" value="${randomized[2]}">
                         <label for="answer3">C. <span>${randomized[2]}</span></label>
                     </div>
                     <div class="answer">
-                        <input type="radio" id="answer4" name="answers" value="lorem">
+                        <input type="radio" id="answer4" name="answers" value="${randomized[3]}">
                         <label for="answer4">D. <span>${randomized[3]}</span></label>
                     </div>
                 </div>
             </form>
             <button>Submit <i class="fas fa-long-arrow-alt-right"></i></button>`
     $('.question').html(frame);
+    app.level++;
 }
+app.verifyAnswer = () =>{
+    $('button').on('click')
+    let userAnswer = $("input[name=answers]:checked").val();
+    console.log(userAnswer);
+
+}
+
 app.loadStartButton = () => {
+    $('button').html('Begin <i class="fas fa-long-arrow-alt-right"></i>').toggleClass('loading');
     $('button').on('click', (e)=> {
         e.preventDefault();
         
         app.loadNextQuestion(app.questions, app.correctAnswers, app.incorrectAnswers);
         
 
-        
-
     })
-    $('button').html('Begin <i class="fas fa-long-arrow-alt-right"></i>').toggleClass('loading');
 }
 
 
 app.init = () => {
-    getData();
-    console.log(app.questions);
+    app.getData();
 }
 
 
 $(function () {
     app.init();
-    console.log(app.questions);
 
 });
