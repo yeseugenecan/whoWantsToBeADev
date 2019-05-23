@@ -5,6 +5,8 @@ html{
 }
 body{
     font-size: 1rem;
+    background: linear-gradient(#1f1f2e, #0a0f15);
+    
 }
 
 h1,
@@ -13,6 +15,23 @@ h3,
 h4,
 p{
     margin: 0;
+    font-family: 'Nunito', sans-serif;
+    color: #fff;
+}
+
+label,
+input,
+button {
+    font-family: 'Nunito', sans-serif;
+}
+
+h1 {
+    font-size: 1.3em;
+    font-weight: 600;
+}
+h2 {
+    font-size: 2.5rem;
+    font-weight: 600;
 }
 .game{
     display: flex;
@@ -27,9 +46,10 @@ p{
 }
 
 header {
-    flex-basis: 200px;
+    flex: 0 0 300px;
     display: flex;
     flex-direction: column; 
+    border-right: solid 1px #4f5165;
     ul{
         padding: 0;
         display: flex;
@@ -41,6 +61,19 @@ header {
         display: flex;
         justify-content: space-between;
         align-items: center;
+        opacity: 0.2;
+
+        p{
+            font-weight: 300;
+            color: #4f5165;
+            width: 50%;
+            padding: 0 10px;
+        }
+
+        h3{
+            width: 50%;
+            border-right: solid 3px #4f5165;
+        }
     }
 }
 
@@ -52,12 +85,60 @@ main {
     padding-left: 50px;
 
 }
+.widgets{
+    position: absolute;
+    top: 20px;
+}
 
 .answers{
     display: flex;
     flex-wrap: wrap;
+    margin: 0 -2%;
 }
+
 .answer{
-    flex-basis: 50%;
-    padding: 25px 0;
+    width: 46%;
+    padding: 10px 25px;;
+    margin: 2%;
+    border: 3px solid #547aa5;
+    background: #1f1f2e;
+    border-radius: 10px;
+
+    input {
+        position: absolute;
+        opacity: 0;
+    }
+
+
+    label {
+        color: #fff;
+        width: 100%;
+        display: block;
+        font-family: 'Nunito',
+        sans-serif;
+        position: relative;
+
+        &::before {
+            content: "";
+            position: absolute;
+            top: 1px;
+            right: 0;
+            height: 20px;
+            width: 20px;
+            border: 3px solid #547aa5;
+            background: #1f1f2e;
+            border-radius: 50%;
+        }
+    }
+}
+
+button {
+    background-color: #50d8d7;
+    border: none;
+    padding: 5px 20px;
+    border-radius: 20px;
+
+    &:hover, &:focus {
+        background-color: darken( #50d8d7, 20%);
+    }
 }

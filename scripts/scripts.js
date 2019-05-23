@@ -82,15 +82,15 @@ app.loadNextQuestion = (question, correct, wrong) =>{
                     </div>
                     <div class="answer">
                         <input type="radio" id="answer2" name="answers" value="lorem">
-                        <label for="answer1">B. <span>${randomized[1]}</span></label>
+                        <label for="answer2">B. <span>${randomized[1]}</span></label>
                     </div>
                     <div class="answer">
                         <input type="radio" id="answer3" name="answers" value="lorem">
-                        <label for="answer1">C. <span>${randomized[2]}</span></label>
+                        <label for="answer3">C. <span>${randomized[2]}</span></label>
                     </div>
                     <div class="answer">
                         <input type="radio" id="answer4" name="answers" value="lorem">
-                        <label for="answer1">D. <span>${randomized[3]}</span></label>
+                        <label for="answer4">D. <span>${randomized[3]}</span></label>
                     </div>
                 </div>
             </form>`
