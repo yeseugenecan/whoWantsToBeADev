@@ -60,13 +60,11 @@ app.randomizeAnswers = (correct, wrongAnswer) => {
 
 
 app.loadStartButton = () => {
-    $('button').html('Begin <i class="fas fa-long-arrow-alt-right"></i>').toggleClass('loading');
-    $('button').on('click', (e) => {
+    $('.loading').html('Begin <i class="fas fa-long-arrow-alt-right"></i>').removeClass('loading').addClass('begin');
+    $('.question').on('click', '.begin', (e) => {
         e.preventDefault();
         app.loadWidget();
         app.loadNextQuestion(app.questions, app.correctAnswers, app.incorrectAnswers);
-
-
     })
 }
 
@@ -95,7 +93,7 @@ app.loadNextQuestion = (question, correct, wrong) => {
                     </div>
                 </div>
             </form>
-            <button>Submit <i class="fas fa-long-arrow-alt-right"></i></button>`
+            <button class="submit">Submit <i class="fas fa-long-arrow-alt-right"></i></button>`
     $('.question').html(frame);
     $(`ul li:nth-child(${app.level + 1})`).css({"opacity": "1"});
     $(`ul li:nth-child(${app.level})`).css({ "opacity": "0.2" });
@@ -104,13 +102,34 @@ app.loadNextQuestion = (question, correct, wrong) => {
 
 
 app.gameOver = () => {
-    $('.widgets').hide();
-    $('.question').html(`<h2>GAME OVER BRAH!</h2>`)
-    
+    $('.widgets').empty();
+    $('.question').html(`<h2>GAME OVER BRAH!</h2><button class="reset">Play Again</button>`)
+    app.resetGame();
 }
+
+app.resetGame = () => {
+    $('.question').on('click', '.reset', () => {
+        app.loadStartScreen();
+        app.level = 0;
+        app.questions = [];
+        app.correctAnswers = [];
+        app.incorrectAnswers = [];
+        app.randomizedAnswers = [];
+        app.randomIndex;
+        app.init();
+    })
+}
+app.loadStartScreen = () =>{
+    let frame =    `<h2> Who wants to be a developer</h2>
+                    <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit.Officia dolores reprehenderit, facerequibusdam nihil modi error quia odio cumque minus!</p>
+                    <button class="loading">Loading <i class="fas fa-long-arrow-alt-right"></i></button>`
+    $('.question').html(frame);
+}
+
 app.youWon = () => {
     $('.widgets').hide();
-    $('.question').html(`<h2>Congratulations You Won!</h2><p>Looks like you already are a developer</p>`)
+    $('.question').html(`<h2>Congratulations You Won!</h2><p>Looks like you already are a developer</p><button class="reset">Play Again</button>`)
+    app.resetGame();
 }
 
 app.makeTimer = (timeLeft) => {
@@ -139,7 +158,7 @@ app.makeTimer = (timeLeft) => {
         if (timeLeft < 10) {
             $countdown.html(`<p>${Math.round(timeLeft * 10) / 10}</p>`);
         }
-        $('.question').on('click', 'button', () => {
+        $('.question').on('click', '.submit', () => {
             clearInterval(timer);
         });
         //when width of the progress bar is zero, clearInterval and move to the next frame.
@@ -155,14 +174,33 @@ app.makeTimer = (timeLeft) => {
 app.loadWidget = () => {
     $('.widgets').html(`
         <div class="progressOuter">
-            <div class="progressInner">
-            </div> 
-            <div class="countdown"><p>60</p><div>
+            <div class="progressInner"></div> 
+            <div class="countdown"><p>60</p></div>
         </div>
+        <button class="fiftyfifty">fifty fifty</button>
     `)
 }
 
-app.getData = async function() {
+//this is a helper function for fifty fifty. It picks two random indices that don't contain the correct answer to remove.
+app.indicesToRemove = () => {
+    let dummyArray = [0,1,2,3];
+    var correctIndex = dummyArray.indexOf(app.randomIndex);
+    dummyArray.splice(correctIndex, 1);
+    let indextoRemove = Math.floor(Math.random() * 3);
+    dummyArray.splice(indextoRemove, 1);
+    return dummyArray
+}
+app.fiftyFifty = () =>{
+    $('.widgets').on('click', 'button', ()=>{
+        indicesToRemove = app.indicesToRemove();
+        $(`.answer:nth-child(${indicesToRemove[0]+1})`).empty();
+        $(`.answer:nth-child(${indicesToRemove[1]+1})`).empty();
+        // $(`.answer:nth-child(${indicesToRemove[1]}+1)`).empty();
+    })
+}
+
+
+app.getData = async function () {
     const easyQuestions = await app.getQuestions('easy');
     const mediumQuestions = await app.getQuestions('medium');
     const hardQuestions = await app.getQuestions('hard');
@@ -174,14 +212,12 @@ app.getData = async function() {
     })
     // console.log(app.questions);
     app.loadStartButton();
-    
+
 }
-
-
 
 app.init = () => {
     app.getData();
-    $('.question').on('click', 'button', () => {
+    $('.question').on('click', '.submit', () => {
         let userAnswer = $("input[name=answers]:checked").val();
         if(app.randomIndex === parseInt(userAnswer, 10) && app.level === 14){
             app.youWon();
@@ -194,8 +230,8 @@ app.init = () => {
         else {
             app.gameOver();
         }
-
     })
+    app.fiftyFifty()
 }
 
 
