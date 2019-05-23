@@ -173,7 +173,9 @@ app.loadWidget = () => {
 }
 
 app.getData = async function() {
-    const data = await app.getQuestions('easy');
+    const easyQuestions = await app.getQuestions('easy');
+    const mediumQuestions = await app.getQuestions('medium');
+    const hardQuestions = await app.getQuestions('hard');
     const arrayOfQuestions = data.results;
     arrayOfQuestions.forEach((arrayItem) => {
         app.questions.push(arrayItem.question);
