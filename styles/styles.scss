@@ -18,6 +18,9 @@ p{
     font-family: 'Nunito', sans-serif;
     color: #fff;
 }
+img {
+    width: 100%;
+}
 
 label,
 input,
@@ -28,6 +31,10 @@ button {
 h1 {
     font-size: 1.3em;
     font-weight: 600;
+
+    img{
+        max-width: 150px;;
+    }
 }
 h2 {
     font-size: 2.5rem;

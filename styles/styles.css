@@ -199,6 +199,10 @@ p {
   color: #fff;
 }
 
+img {
+  width: 100%;
+}
+
 label,
 input,
 button {
@@ -208,6 +212,10 @@ button {
 h1 {
   font-size: 1.3em;
   font-weight: 600;
+}
+
+h1 img {
+  max-width: 150px;
 }
 
 h2 {
