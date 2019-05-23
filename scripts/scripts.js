@@ -1,3 +1,5 @@
+// HELLLO CAN
+
 // create an object called theGame
 // Make 3 different API calls to fetch 15 questions in varying difficulties.
 // Store these questions in an array of objects.
