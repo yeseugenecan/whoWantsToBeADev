@@ -103,24 +103,14 @@ app.loadNextQuestion = (question, correct, wrong) => {
 }
 
 
-app.verifyAnswer = () => {
-    $('.question').on('click', 'button', ()=>{
-        let userAnswer = $("input[name=answers]:checked").val();
-        if (app.randomIndex === parseInt(userAnswer, 10)){
-            console.log("correct");
-            app.level++;
-            app.loadNextQuestion(app.questions, app.correctAnswers, app.incorrectAnswers);
-        }
-        else{
-            app.gameOver();
-        }
-
-    })
-}
 app.gameOver = () => {
     $('.widgets').hide();
     $('.question').html(`<h2>GAME OVER BRAH!</h2>`)
     
+}
+app.youWon = () => {
+    $('.widgets').hide();
+    $('.question').html(`<h2>Congratulations You Won!</h2><p>Looks like you already are a developer</p>`)
 }
 
 app.makeTimer = (timeLeft) => {
@@ -191,8 +181,23 @@ app.getData = async function() {
 
 app.init = () => {
     app.getData();
-    app.verifyAnswer();
+    $('.question').on('click', 'button', () => {
+        let userAnswer = $("input[name=answers]:checked").val();
+        if(app.randomIndex === parseInt(userAnswer, 10) && app.level === 14){
+            app.youWon();
+        }
+        else if (app.randomIndex === parseInt(userAnswer, 10)) {
+            console.log("correct");
+            app.level++;
+            app.loadNextQuestion(app.questions, app.correctAnswers, app.incorrectAnswers);
+        }
+        else {
+            app.gameOver();
+        }
+
+    })
 }
+
 
 
 $(function () {
