@@ -430,6 +430,10 @@ button:hover, button:focus {
   color: white;
 }
 
+.widgets .usedLifeline {
+  opacity: 0.1;
+}
+
 .lifelines {
   -webkit-box-flex: 1;
       -ms-flex: 1 1 40%;
@@ -506,29 +510,35 @@ button:hover, button:focus {
   margin: 25px;
 }
 
-.audienceChart div {
-  width: 80%;
+.audienceChart .bar {
+  width: 100%;
   height: 25px;
-  background-color: white;
-  margin-left: 10%;
+  background-color: #50d8d7;
   text-align: center;
   border-radius: 0 5px 5px 0;
-}
-
-.audienceChart div p {
-  color: black;
-}
-
-.bar {
   position: relative;
+  margin: 20px 0;
 }
 
-.bar:before {
+.audienceChart .bar:before {
   font-family: 'Nunito', sans-serif;
   position: absolute;
   left: -25px;
   color: white;
   top: 0;
+}
+
+.audienceChart .bar p {
+  color: #fff;
+  margin: 0;
+}
+
+.chartContainer {
+  width: calc(100% - 80px);
+  margin: 40px auto;
+  border-left: solid 1px white;
+  border-bottom: solid 1px white;
+  padding: 1px 0 1px;
 }
 
 .bar0:before {

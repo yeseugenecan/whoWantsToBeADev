@@ -199,7 +199,9 @@ button {
         i{
             color: white;
         }
-
+    }
+    .usedLifeline{
+        opacity: 0.1;
     }
 }
 .lifelines{
@@ -258,29 +260,35 @@ button {
     }
 }
 
-.audienceChart div{
-    width: 80%;
+.audienceChart .bar {
+    width: 100%;
     height: 25px;
-    background-color: white;
-    margin-left: 10%;
+    background-color: #50d8d7;
     text-align: center;
     border-radius: 0 5px 5px 0;
+    position: relative;
+    margin: 20px 0;
+
+    &:before {
+        font-family: 'Nunito', sans-serif;
+        position: absolute;
+        left: -25px;
+        color: white;
+        top: 0;
+    }
     p{
-        color: black;
+        color: #fff;
+        margin: 0;
     }
     
 }
-.bar{
-    position: relative;
+.chartContainer{
+    width: calc(100% - 80px);
+    margin: 40px auto;
+    border-left: solid 1px white;
+    border-bottom: solid 1px white;
+    padding: 1px 0 1px;
 }
-.bar:before{
-    font-family: 'Nunito', sans-serif;
-    position: absolute;
-    left: -25px;
-    color: white;
-    top: 0;   
-}
-
 .bar0:before{
     content: "A";
     

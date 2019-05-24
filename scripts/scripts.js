@@ -117,7 +117,10 @@ app.resetGame = () => {
         app.randomIndex = 0;
         app.loadStartScreen();
         app.getData();
-        $('.usedLifeline').addClass('fiftyFifty').removeClass('usedLifeline');
+        app.fiftyFifty();
+        app.messageFriend();
+        app.askTheAudience();
+        $('.usedLifeline').removeClass('usedLifeline');
         $('.question').off('click', '.reset');
 
     })
@@ -203,7 +206,8 @@ app.fiftyFifty = () =>{
         console.log(indicesToRemove)
         $(`.answer:nth-child(${indicesToRemove[0]+1})`).empty();
         $(`.answer:nth-child(${indicesToRemove[1]+1})`).empty();
-        $('.fiftyFifty').addClass('usedLifeline').removeClass('fiftyFifty'); //this will have to be changed
+        $('.fiftyFifty').addClass('usedLifeline');
+        $('.widgets').off('click', '.fiftyFifty');
     })
 }
 app.messageFriend = () =>{
@@ -235,8 +239,8 @@ app.messageFriend = () =>{
             $('.popup').empty();
             $('.popup').off('click', 'button')
         });
-        console.log("random: " + randomizer)
-        console.log("index: " + hintIndex)
+        $('.messageFriend').addClass('usedLifeline');
+        $('.widgets').off('click', '.messageFriend');
     });
 }
 app.askTheAudience = () => {
@@ -277,23 +281,25 @@ app.askTheAudience = () => {
             <div class="takeOver">
                 <div class="popupBox audienceChart">
                     <h4>Ask the Audience</h4>
+                    <div class="chartContainer">
                         <div class="bar0 bar"><p>A</p></div>
                         <div class="bar1 bar"><p>B</p></div>
                         <div class="bar2 bar"><p>C</p></div>
                         <div class="bar3 bar"><p>D</p></div>
+                    </div>
                     <button>Close</button>
                 </div>
             </div>`);
         for(i=0; i<audiencePoll.length; i++){
-            $(`.bar${i}`).width(`${audiencePoll[i]/maxPercent*80}%`);
+            $(`.bar${i}`).width(`${audiencePoll[i]/maxPercent*100}%`);
             $(`.bar${i}>p`).html(`${audiencePoll[i]}%`);
         }
         $('.popup').on('click', 'button', () => {
             $('.popup').empty();
             $('.popup').off('click', 'button')
         });
-        console.log("random: " + randomizer)
-        console.log("index: " + hintIndex)
+        $('.askTheAudience').addClass('usedLifeline');
+        $('.widgets').off('click', '.askTheAudience');
     });
 }
 
