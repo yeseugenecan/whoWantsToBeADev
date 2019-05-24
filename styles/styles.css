@@ -413,6 +413,10 @@ button:hover, button:focus {
           align-items: center;
 }
 
+.widgets li {
+  margin-left: 20px;
+}
+
 .widgets li button {
   width: 50px;
   height: 50px;
@@ -427,20 +431,24 @@ button:hover, button:focus {
 }
 
 .lifelines {
-  width: 40%;
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 40%;
+          flex: 1 1 40%;
   list-style: none;
-  padding: 0 0 0 20px;
+  padding: 0;
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
-  -webkit-box-pack: justify;
-      -ms-flex-pack: justify;
-          justify-content: space-between;
+  -webkit-box-pack: end;
+      -ms-flex-pack: end;
+          justify-content: flex-end;
   margin: 0;
 }
 
 .progressOuter {
-  width: calc(60% - 4px);
+  -webkit-box-flex: 1;
+      -ms-flex: 1 1 calc(60% - 4px);
+          flex: 1 1 calc(60% - 4px);
   height: 46px;
   border-radius: 25px;
   -webkit-box-sizing: content-box;
