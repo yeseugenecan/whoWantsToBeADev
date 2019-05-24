@@ -67,16 +67,6 @@ app.randomizeAnswers = (correct, wrongAnswer) => {
 //     return array;
 // }
 
-
-app.loadStartButton = () => {
-    $('.loading').html('Begin <i class="fas fa-long-arrow-alt-right"></i>').removeClass('loading').addClass('begin');
-    $('.question').on('click', '.begin', (e) => {
-        e.preventDefault();
-        app.loadWidget();
-        app.loadNextQuestion(app.questions, app.correctAnswers, app.incorrectAnswers);
-    })
-}
-
 app.loadNextQuestion = (question, correct, wrong) => {
     let randomized = app.randomizeAnswers(correct[app.level], wrong[app.level]);
     app.makeTimer(15);
@@ -118,16 +108,17 @@ app.gameOver = () => {
 
 app.resetGame = () => {
     $('.question').on('click', '.reset', () => {
-        $('.question').off();
-        app.loadStartScreen();
         app.level = 0;
         app.questions = [];
         app.correctAnswers = [];
         app.incorrectAnswers = [];
         app.randomizedAnswers = [];
-        app.randomIndex;
-        app.init();
-        // app.getData();
+        app.randomIndex = 0;
+        app.loadStartScreen();
+        app.getData();
+        $('.usedLifeline').addClass('fiftyfifty').removeClass('usedLifeline');
+        $('.question').off('click', '.reset');
+
     })
 }
 app.loadStartScreen = () =>{
@@ -208,9 +199,7 @@ app.fiftyFifty = () =>{
         console.log(indicesToRemove)
         $(`.answer:nth-child(${indicesToRemove[0]+1})`).empty();
         $(`.answer:nth-child(${indicesToRemove[1]+1})`).empty();
-        // $(`.answer:nth-child(${indicesToRemove[1]}+1)`).empty();
-        $('.fiftyfifty').addClass('usedLifeline').removeClass('fiftyfifty');
-        $('.widgets').off();
+        $('.fiftyfifty').addClass('usedLifeline').removeClass('fiftyfifty'); //this will have to be changed
     })
 }
 app.messageFriend = () =>{
@@ -219,6 +208,7 @@ app.messageFriend = () =>{
 
 
 app.getData = async function () {
+    console.log("-------------START OF A NEW ATTEMPT----------");
     const easyQuestions = await app.getQuestions('easy');
     const mediumQuestions = await app.getQuestions('medium');
     const hardQuestions = await app.getQuestions('hard');
@@ -229,12 +219,17 @@ app.getData = async function () {
         app.incorrectAnswers.push(arrayItem.incorrect_answers);
     })
     // console.log(app.questions);
-    app.loadStartButton();
+    $('.loading').html('Begin <i class="fas fa-long-arrow-alt-right"></i>').removeClass('loading').addClass('begin');
 
 }
 
 app.init = () => {
     app.getData();
+    $('.question').on('click', '.begin', (e) => {
+        e.preventDefault();
+        app.loadWidget();
+        app.loadNextQuestion(app.questions, app.correctAnswers, app.incorrectAnswers);
+    })
     $('.question').on('click', '.submit', () => {
         let userAnswer = $("input[name=answers]:checked").val();
         if(app.randomIndex === parseInt(userAnswer, 10) && app.level === 14){
@@ -256,5 +251,4 @@ app.init = () => {
 
 $(function () {
     app.init();
-
 });
