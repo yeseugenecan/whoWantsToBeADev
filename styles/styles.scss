@@ -211,7 +211,7 @@ button {
 }
 
 .progressOuter {
-    width: 60%;
+    width: calc(60% - 4px);
     height: 46px;
     border-radius: 25px;
     box-sizing: content-box;
@@ -221,14 +221,14 @@ button {
 }
 .progressInner {
     width: 100%;
-    height: 50px;
-    background: linear-gradient(right, #ff4a75, #50d8d7);
+    height: 46px;
+    background: linear-gradient(left, #ff4a75, #50d8d7);
     border-radius: 25px;
     border: solid 1px #1f1f2e;
 }
 .countdown {
     position: absolute;
-    top: 0;
+    top: 10px;
     left: 50%;
 }
 .takeOver {

@@ -182,8 +182,8 @@ app.loadWidget = () => {
         </div>
         <ul class="lifelines">
             <li><button class="fiftyfifty"><i class="fas fa-divide"></i></button></li>
-            <li><button class="messageFriend"><i class="fas fa-chart-bar"></i></button></li>
-            <li><button><i class="far fa-comment"></i></button></li> 
+            <li><button><i class="fas fa-chart-bar"></i></button></li>
+            <li><button class="messageFriend"><i class="far fa-comment"></i></button></li> 
         </ul>
     `)
 }
