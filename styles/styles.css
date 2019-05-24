@@ -293,6 +293,10 @@ header li h3 {
   border-right: solid 3px #4f5165;
 }
 
+header .currentQuestion {
+  opacity: 1;
+}
+
 main {
   -ms-flex-preferred-size: 800px;
       flex-basis: 800px;

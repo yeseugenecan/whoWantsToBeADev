@@ -94,8 +94,8 @@ app.loadNextQuestion = (question, correct, wrong) => {
             </form>
             <button class="submit">Submit <i class="fas fa-long-arrow-alt-right"></i></button>`
     $('.question').html(frame);
-    $(`ul li:nth-child(${app.level + 1})`).css({"opacity": "1"});
-    $(`ul li:nth-child(${app.level})`).css({ "opacity": "0.2" });
+    $(`ul li:nth-child(${app.level + 1})`).addClass('currentQuestion');
+    $(`ul li:nth-child(${app.level})`).removeClass('currentQuestion');
     
 }
 
@@ -108,6 +108,7 @@ app.gameOver = () => {
 
 app.resetGame = () => {
     $('.question').on('click', '.reset', () => {
+        $(`ul li:nth-child(${app.level+1})`).removeClass('currentQuestion');
         app.level = 0;
         app.questions = [];
         app.correctAnswers = [];
