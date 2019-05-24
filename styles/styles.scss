@@ -52,7 +52,7 @@ h2 {
     margin: 0 auto;
 }
 
-header {
+aside {
     flex: 0 0 300px;
     display: flex;
     flex-direction: column; 
@@ -221,9 +221,5 @@ button {
 
     h4, p, button {
         margin: 25px;
-    }
-
-    button {
-        margin-top: auto;
     }
 }

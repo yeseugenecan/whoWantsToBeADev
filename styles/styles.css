@@ -239,7 +239,7 @@ h2 {
   margin: 0 auto;
 }
 
-header {
+aside {
   -webkit-box-flex: 0;
       -ms-flex: 0 0 300px;
           flex: 0 0 300px;
@@ -253,7 +253,7 @@ header {
   border-right: solid 1px #4f5165;
 }
 
-header ul {
+aside ul {
   padding: 0;
   display: -webkit-box;
   display: -ms-flexbox;
@@ -268,7 +268,7 @@ header ul {
   height: 80vh;
 }
 
-header li {
+aside li {
   display: -webkit-box;
   display: -ms-flexbox;
   display: flex;
@@ -281,19 +281,19 @@ header li {
   opacity: 0.2;
 }
 
-header li p {
+aside li p {
   font-weight: 300;
   color: #80808a;
   width: 50%;
   padding: 0 10px;
 }
 
-header li h3 {
+aside li h3 {
   width: 50%;
   border-right: solid 3px #4f5165;
 }
 
-header .currentQuestion {
+aside .currentQuestion {
   opacity: 1;
 }
 
@@ -452,9 +452,5 @@ button:hover, button:focus {
 
 .popupBox h4, .popupBox p, .popupBox button {
   margin: 25px;
-}
-
-.popupBox button {
-  margin-top: auto;
 }
 /*# sourceMappingURL=styles.css.map */
