@@ -117,7 +117,7 @@ app.resetGame = () => {
         app.randomIndex = 0;
         app.loadStartScreen();
         app.getData();
-        $('.usedLifeline').addClass('fiftyfifty').removeClass('usedLifeline');
+        $('.usedLifeline').addClass('fiftyFifty').removeClass('usedLifeline');
         $('.question').off('click', '.reset');
 
     })
@@ -181,8 +181,8 @@ app.loadWidget = () => {
             <div class="countdown"><p>60</p></div>
         </div>
         <ul class="lifelines">
-            <li><button class="fiftyfifty"><i class="fas fa-divide"></i></button></li>
-            <li><button><i class="fas fa-chart-bar"></i></button></li>
+            <li><button class="fiftyFifty"><i class="fas fa-divide"></i></button></li>
+            <li><button class="askTheAudience"><i class="fas fa-chart-bar"></i></button></li>
             <li><button class="messageFriend"><i class="far fa-comment"></i></button></li> 
         </ul>
     `)
@@ -198,12 +198,12 @@ app.indicesToRemove = () => {
     return dummyArray
 }
 app.fiftyFifty = () =>{
-    $('.widgets').on('click', '.fiftyfifty', ()=>{
+    $('.widgets').on('click', '.fiftyFifty', ()=>{
         let indicesToRemove = app.indicesToRemove();
         console.log(indicesToRemove)
         $(`.answer:nth-child(${indicesToRemove[0]+1})`).empty();
         $(`.answer:nth-child(${indicesToRemove[1]+1})`).empty();
-        $('.fiftyfifty').addClass('usedLifeline').removeClass('fiftyfifty'); //this will have to be changed
+        $('.fiftyFifty').addClass('usedLifeline').removeClass('fiftyFifty'); //this will have to be changed
     })
 }
 app.messageFriend = () =>{
@@ -231,6 +231,63 @@ app.messageFriend = () =>{
                     <button>Close</button>
                 </div>
             </div>`);
+        $('.popup').on('click', 'button', () => {
+            $('.popup').empty();
+            $('.popup').off('click', 'button')
+        });
+        console.log("random: " + randomizer)
+        console.log("index: " + hintIndex)
+    });
+}
+app.askTheAudience = () => {
+    const getRandomArbitrary = (min, max) => {
+        return Math.floor(Math.random() * (max - min) + min);
+    }
+    $('.widgets').on('click', '.askTheAudience', () => {
+        let randomizer = Math.random();
+        let percent1 = getRandomArbitrary(0, 76);
+        let percent2 = getRandomArbitrary(0, 101-percent1);
+        let percent3 = getRandomArbitrary(0, 101-percent1-percent2);
+        let percent4 = 100-percent1-percent2-percent3;
+        console.log(percent1, percent2, percent3, percent4);
+
+        let audiencePoll = [percent1, percent2, percent3, percent4];
+        let maxPercent = Math.max(...audiencePoll);
+        indexOfMax = audiencePoll.indexOf(maxPercent);
+        audiencePoll.splice(indexOfMax,1);
+        console.log(audiencePoll);
+
+        if (app.level < 5) {
+            hintIndex = app.randomIndex;
+        } else if (app.level < 10 && randomizer >= .2) {
+            hintIndex = app.randomIndex;
+        } else if (app.level >= 10 && randomizer >= .5) {
+            hintIndex = app.randomIndex;
+        } else {
+            if (app.randomIndex === 0) {
+                hintIndex = app.randomIndex + 1;
+            } else {
+                hintIndex = app.randomIndex - 1;
+            }
+        }
+        audiencePoll.splice(hintIndex, 0, maxPercent);
+        console.log(audiencePoll);
+
+        $('.popup').html(`                
+            <div class="takeOver">
+                <div class="popupBox audienceChart">
+                    <h4>Ask the Audience</h4>
+                        <div class="bar0 bar"><p>A</p></div>
+                        <div class="bar1 bar"><p>B</p></div>
+                        <div class="bar2 bar"><p>C</p></div>
+                        <div class="bar3 bar"><p>D</p></div>
+                    <button>Close</button>
+                </div>
+            </div>`);
+        for(i=0; i<audiencePoll.length; i++){
+            $(`.bar${i}`).width(`${audiencePoll[i]/maxPercent*80}%`);
+            $(`.bar${i}>p`).html(`${audiencePoll[i]}%`);
+        }
         $('.popup').on('click', 'button', () => {
             $('.popup').empty();
             $('.popup').off('click', 'button')
@@ -280,6 +337,7 @@ app.init = () => {
     })
     app.fiftyFifty();
     app.messageFriend();
+    app.askTheAudience();
 }
 
 

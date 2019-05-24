@@ -257,3 +257,43 @@ button {
         margin: 25px;
     }
 }
+
+.audienceChart div{
+    width: 80%;
+    height: 25px;
+    background-color: white;
+    margin-left: 10%;
+    text-align: center;
+    border-radius: 0 5px 5px 0;
+    p{
+        color: black;
+    }
+    
+}
+.bar{
+    position: relative;
+}
+.bar:before{
+    font-family: 'Nunito', sans-serif;
+    position: absolute;
+    left: -25px;
+    color: white;
+    top: 0;   
+}
+
+.bar0:before{
+    content: "A";
+    
+}
+.bar1:before{
+    content: "B";
+    
+}
+.bar2:before{
+    content: "C";
+    
+}
+.bar3:before{
+    content: "D";
+    
+}
