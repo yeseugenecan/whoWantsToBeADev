@@ -68,7 +68,7 @@ app.randomizeAnswers = (correct, wrongAnswer) => {
 // }
 
 app.loadNextQuestion = (question, correct, wrong) => {
-    let randomized = app.randomizeAnswers(correct[app.level], wrong[app.level]);
+    app.randomizedAnswers = app.randomizeAnswers(correct[app.level], wrong[app.level]);
     app.makeTimer(15);
     console.log(`correct answer is: ${app.correctAnswers[app.level]}`);
     let frame = `<h2>${question[app.level]}</h2>
@@ -76,19 +76,19 @@ app.loadNextQuestion = (question, correct, wrong) => {
                 <div class="answers">
                     <div class="answer">
                         <input type="radio" id="answer1" name="answers" value="0">
-                        <label for="answer1">A. <span>${randomized[0]}</span></label>
+                        <label for="answer1">A. <span>${app.randomizedAnswers[0]}</span></label>
                     </div>
                     <div class="answer">
                         <input type="radio" id="answer2" name="answers" value="1">
-                        <label for="answer2">B. <span>${randomized[1]}</span></label>
+                        <label for="answer2">B. <span>${app.randomizedAnswers[1]}</span></label>
                     </div>
                     <div class="answer">
                         <input type="radio" id="answer3" name="answers" value="2">
-                        <label for="answer3">C. <span>${randomized[2]}</span></label>
+                        <label for="answer3">C. <span>${app.randomizedAnswers[2]}</span></label>
                     </div>
                     <div class="answer">
                         <input type="radio" id="answer4" name="answers" value="3">
-                        <label for="answer4">D. <span>${randomized[3]}</span></label>
+                        <label for="answer4">D. <span>${app.randomizedAnswers[3]}</span></label>
                     </div>
                 </div>
             </form>
@@ -203,7 +203,32 @@ app.fiftyFifty = () =>{
     })
 }
 app.messageFriend = () =>{
-
+    $('.widgets').on('click', '.messageFriend', () => {
+        let randomizer = Math.random();
+        let hintIndex = 0;
+        if(app.level < 5) {
+            hintIndex = app.randomIndex;
+        } else if(app.level < 10 && randomizer >= .2) {
+            hintIndex = app.randomIndex;
+        }  else if(app.level >= 10 && randomizer >= .5){
+            hintIndex = app.randomIndex;
+        } else {
+            if (app.randomIndex === 0) {
+                hintIndex = app.randomIndex + 1;
+            } else {
+                hintIndex = app.randomIndex - 1;
+            }
+        }
+        $('.popup').html(`                
+            <div class="takeOver"></div>
+            <div class="popupBox">
+                <h4>Message a Friend</h4>
+                <p><span class="friend">Brent:</span>I'm pretty sure that the correct answer is ${app.randomizedAnswers[hintIndex]}</p>
+                <button>Close</button>
+            </div>`);
+        console.log("random: " + randomizer)
+        console.log("index: " + hintIndex)
+    });
 }
 
 
@@ -244,7 +269,8 @@ app.init = () => {
             app.gameOver();
         }
     })
-    app.fiftyFifty()
+    app.fiftyFifty();
+    app.messageFriend();
 }
 
 
