@@ -69,7 +69,7 @@ app.randomizeAnswers = (correct, wrongAnswer) => {
 
 app.loadNextQuestion = (question, correct, wrong) => {
     app.randomizedAnswers = app.randomizeAnswers(correct[app.level], wrong[app.level]);
-    app.makeTimer(15);
+    app.makeTimer(100);
     console.log(`correct answer is: ${app.correctAnswers[app.level]}`);
     let frame = `<h2>${question[app.level]}</h2>
             <form action="">
@@ -180,8 +180,11 @@ app.loadWidget = () => {
             <div class="progressInner"></div> 
             <div class="countdown"><p>60</p></div>
         </div>
-        <button class="fiftyfifty">fifty fifty</button>
-        <button class="messageFriend">Message Friend</button>
+        <ul class="lifelines">
+            <li><button class="fiftyfifty"><i class="fas fa-divide"></i></button></li>
+            <li><button class="messageFriend"><i class="fas fa-chart-bar"></i></button></li>
+            <li><button><i class="far fa-comment"></i></button></li> 
+        </ul>
     `)
 }
 
