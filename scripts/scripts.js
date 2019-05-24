@@ -220,12 +220,17 @@ app.messageFriend = () =>{
             }
         }
         $('.popup').html(`                
-            <div class="takeOver"></div>
-            <div class="popupBox">
-                <h4>Message a Friend</h4>
-                <p><span class="friend">Brent:</span>I'm pretty sure that the correct answer is ${app.randomizedAnswers[hintIndex]}</p>
-                <button>Close</button>
+            <div class="takeOver">
+                <div class="popupBox">
+                    <h4>Message a Friend</h4>
+                    <p><span class="friend">Brent: </span>I'm pretty sure that the correct answer is ${app.randomizedAnswers[hintIndex]}.</p>
+                    <button>Close</button>
+                </div>
             </div>`);
+        $('.popup').on('click', 'button', () => {
+            $('.popup').empty();
+            $('.popup').off('click', 'button')
+        });
         console.log("random: " + randomizer)
         console.log("index: " + hintIndex)
     });
