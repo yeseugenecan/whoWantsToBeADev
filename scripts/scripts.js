@@ -329,17 +329,27 @@ app.init = () => {
     })
     $('.question').on('click', '.submit', () => {
         let userAnswer = $("input[name=answers]:checked").val();
-        if(app.randomIndex === parseInt(userAnswer, 10) && app.level === 14){
-            app.youWon();
-        }
-        else if (app.randomIndex === parseInt(userAnswer, 10)) {
-            console.log("correct");
-            app.level++;
-            app.loadNextQuestion(app.questions, app.correctAnswers, app.incorrectAnswers);
-        }
-        else {
-            app.gameOver();
-        }
+        $("input[name=answers]:checked ~ label").css('background', 'orange');
+        setTimeout(()=> {
+            if(app.randomIndex === parseInt(userAnswer, 10) && app.level === 14){
+                $("input[name=answers]:checked ~ label").css('background', 'green');
+                setTimeout(app.youWon(), 1000);
+            }
+            else if (app.randomIndex === parseInt(userAnswer, 10)) {
+                $("input[name=answers]:checked ~ label").css('background', 'green');
+                setTimeout(() => {
+                    console.log("correct"); 
+                    app.level++; 
+                    app.loadNextQuestion(app.questions, app.correctAnswers, app.incorrectAnswers)}, 1000);
+            }
+            else {
+                $("input[name=answers]:checked ~ label").css('background', 'red');
+                setTimeout(()=>{
+                    app.gameOver();
+                }   , 1000);
+            
+            }
+        }, 1000);
     })
     app.fiftyFifty();
     app.messageFriend();
