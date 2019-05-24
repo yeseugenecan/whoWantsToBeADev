@@ -215,7 +215,7 @@ h1 {
 }
 
 h1 img {
-  max-width: 150px;
+  width: 150px;
 }
 
 h2 {
@@ -313,10 +313,10 @@ main {
   padding-left: 50px;
 }
 
-.widgets {
-  position: absolute;
-  top: 20px;
-  width: 66%;
+header {
+  display: -webkit-box;
+  display: -ms-flexbox;
+  display: flex;
 }
 
 .answers {

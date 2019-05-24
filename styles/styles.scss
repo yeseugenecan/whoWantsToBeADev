@@ -33,7 +33,7 @@ h1 {
     font-weight: 600;
 
     img{
-        max-width: 150px;;
+        width: 150px;;
     }
 }
 h2 {
@@ -95,10 +95,11 @@ main {
     padding-left: 50px;
 
 }
+header {
+    display: flex;
+}
 .widgets{
-    position: absolute;
-    top: 20px;
-    width: 66%;
+
 }
 
 .answers{
