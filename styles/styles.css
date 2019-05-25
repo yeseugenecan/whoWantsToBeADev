@@ -198,6 +198,7 @@ h1,
 h2,
 h3,
 h4,
+li,
 p {
   margin: 0;
   font-family: 'Nunito Sans', sans-serif;
@@ -225,6 +226,7 @@ header {
   display: -ms-flexbox;
   display: flex;
   padding: 20px 0;
+  min-height: 90px;
 }
 
 main {
@@ -336,7 +338,7 @@ aside .currentQuestion {
 }
 
 .question button {
-  margin-bottom: 20px;
+  margin: 20px 0;
 }
 
 .answers {
@@ -351,6 +353,7 @@ aside .currentQuestion {
 .answer {
   width: 46%;
   margin: 2%;
+  min-height: 48px;
   border: 3px solid #547aa5;
   background: #1f1f2e;
   border-radius: 10px;
@@ -670,6 +673,9 @@ button:hover, button:focus {
 }
 
 @media screen and (max-height: 450px) {
+  .question h2 {
+    font-size: 1rem;
+  }
   .chartContainer {
     margin: 10px auto;
   }
@@ -680,7 +686,25 @@ button:hover, button:focus {
     margin: 10px;
   }
   .hiddenOnMobile {
-    display: none;
+    display: block;
+    opacity: 0;
+  }
+  .currentQuestion {
+    position: absolute;
+    top: 30px;
+  }
+  .currentQuestion h3 {
+    font-size: 1rem;
+  }
+  aside {
+    margin: 0;
+    border: none;
+  }
+  aside ul {
+    margin: 0;
+  }
+  .answer {
+    width: 46%;
   }
 }
 /*# sourceMappingURL=styles.css.map */
