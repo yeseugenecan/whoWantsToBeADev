@@ -238,7 +238,8 @@ button {
 
             &:not(.usedLifeline):hover,
             &:not(.usedLifeline):focus {
-                opacity: 0.7;
+                opacity: 0.6;
+                box-shadow: 0 0 5px #fff;
             }
         }
 
