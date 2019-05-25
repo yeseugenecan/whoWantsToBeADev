@@ -319,7 +319,7 @@ app.getData = async function () {
 app.init = () => {
     app.getData();
     $('.question').on('click', '.begin', (e) => {
-        $('h1').removeClass("hiddenOnMobile");
+        $('h1').addClass("hiddenOnMobile");
         e.preventDefault();
         app.loadWidget();
         app.loadNextQuestion(app.questions, app.correctAnswers, app.incorrectAnswers);
