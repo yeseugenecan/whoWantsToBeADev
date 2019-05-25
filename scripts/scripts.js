@@ -243,7 +243,7 @@ app.askTheAudience = () => {
                     <button>Close</button>
                 </div>
             </div>`);
-        
+
         app.isPaused = true;
         //create a graph with 4 bars based on the numbers specified by audiencePoll array. 
         for (i = 0; i < audiencePoll.length; i++) {
@@ -251,6 +251,8 @@ app.askTheAudience = () => {
             $(`.bar${i}`).width(`${audiencePoll[i] / maxPercent * 100}%`);
             $(`.bar${i}>p`).html(`${audiencePoll[i]}%`);
         }
+        //color the audience favourite orange.
+        $(`.bar${hintIndex}`).css("background", "#f39c12");
         //once the user is done reading the hint, they click "close" to close the popup. Once the button is clicked, the popup is cleared and the event listener is turned off.
         $('.popup').on('click', 'button', () => {
             $('body').removeClass('preventScrolling');
@@ -334,11 +336,11 @@ app.loadNextQuestion = (question, correct, wrong) => {
                         <label for="answer2">B. <span>${app.randomizedAnswers[1]}</span></label>
                     </div>
                     <div class="answer">
-                        <input type="radio" id="answer3" name="answers" value="2">
+                        <input type="radio" id="answer3" name="answers" value="2" >
                         <label for="answer3">C. <span>${app.randomizedAnswers[2]}</span></label>
                     </div>
                     <div class="answer">
-                        <input type="radio" id="answer4" name="answers" value="3">
+                        <input type="radio" id="answer4" name="answers" value="3" >
                         <label for="answer4">D. <span>${app.randomizedAnswers[3]}</span></label>
                     </div>
                 </div>
@@ -402,13 +404,10 @@ app.getData = async function () {
 
     //GET 5 easy questions
     const easyQuestions = await app.getQuestions('easy');
-
     //GET 5 medium questions
     const mediumQuestions = await app.getQuestions('medium');
-
     //GET 5 hard questions
     const hardQuestions = await app.getQuestions('hard');
-
     //Once all API calls are complete, concatenate the results of each into one object called arrayOfQuestions 
     const arrayOfQuestions = ((easyQuestions.results).concat(mediumQuestions.results)).concat(hardQuestions.results);
 
@@ -421,6 +420,7 @@ app.getData = async function () {
     
     //once the API call is completed, change the color of the button by adding a class to indicate the user that the game is ready.
     $('.loading').html('Begin <i class="fas fa-long-arrow-alt-right"></i>').removeClass('loading').addClass('begin');
+    $('.begin').focus();
 
 }
 
