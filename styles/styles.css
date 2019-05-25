@@ -452,7 +452,9 @@ button:hover, button:focus {
 }
 
 .widgets li button:not(.usedLifeline):hover, .widgets li button:not(.usedLifeline):focus {
-  opacity: 0.7;
+  opacity: 0.6;
+  -webkit-box-shadow: 0 0 5px #fff;
+          box-shadow: 0 0 5px #fff;
 }
 
 .widgets li i {
