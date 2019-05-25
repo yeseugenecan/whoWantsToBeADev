@@ -1,3 +1,4 @@
+//---------Pseudocode-----------
 // create an object called theGame
 // Make 3 different API calls to fetch 15 questions in varying difficulties.
 // Store these questions in an array of objects.
@@ -20,14 +21,6 @@
 
 // if user selects a wrong answer, then show the correct answer and display game over and their final score.
 
-
-// Document Ready
-// App.init
-// App.getdata
-// App.loadstartbutton
-// app.loadWidgets and app.loadnextquestion
-// 
-//
 
 const app = {};
 
@@ -161,7 +154,7 @@ app.askFriend = () => {
             <div class="takeOver">
                 <div class="popupBox askAFriendBox">
                     <h4>Ask a Friend</h4>
-                    <div class="imageContainer"><img src="./assets/8BitBrent.png">
+                    <div class="imageContainer"><img src="./assets/8BitBrent.png" alt="photo of a good looking CTO">
                     </div>
                     <div class="messageContainer">
                         <p><span class="friend">Hi I'm Brent</span>, your friendly neighbourhood CTO. ${response} <span>${app.randomizedAnswers[hintIndex]}</span>.</p >
@@ -344,7 +337,7 @@ app.loadNextQuestion = (question, correct, wrong) => {
                     </div>
                 </div>
             </form>
-            <button class="submit">Submit <i class="fas fa-long-arrow-alt-right"></i></button>`
+            <button class="submit">Submit <i class="fas fa-long-arrow-alt-right" aria-label="Begin"></i></button>`
 
     //load the question to the user.
     $('.question').html(frame);
@@ -371,9 +364,9 @@ app.loadWidgets = () => {
             <div class="countdown"><p>60</p></div>
         </div>
         <ul class="lifelines">
-            <li><button class="fiftyFifty"><i class="fas fa-divide"></i></button></li>
-            <li><button class="askTheAudience"><i class="fas fa-chart-bar"></i></button></li>
-            <li><button class="askFriend"><i class="far fa-comment"></i></button></li> 
+            <li><button class="fiftyFifty" aria-label="fifty fifty lifeline"><i class="fas fa-divide"></i></button></li>
+            <li><button class="askTheAudience" aria-label="ask the audience lifeline"><i class="fas fa-chart-bar"></i></button></li>
+            <li><button class="askFriend" aria-label="ask a friend lifeline"><i class="far fa-comment"></i></button></li> 
         </ul>
     `)
     //before turning on any widget, make sure all their event listeners are off.
