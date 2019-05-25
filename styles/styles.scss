@@ -13,6 +13,9 @@ body{
     min-height: 100vh;
     
 }
+.preventScrolling {
+    overflow: hidden;
+}
 
 h1,
 h2,
@@ -26,6 +29,7 @@ p{
 h2 {
     font-family: 'Nunito', sans-serif;
     font-weight: 600;
+    font-size: 2rem;
 }
 h3 {
     font-size: 1.2rem;
@@ -66,10 +70,6 @@ h1 {
     img{
         width: 150px;;
     }
-}
-h2 {
-    font-size: 2.5rem;
-    font-weight: 600;
 }
 .game{
     display: flex;
@@ -116,7 +116,11 @@ aside {
         opacity: 1;
     }
 }
-
+.question {
+    button {
+        margin-bottom: 20px;
+    }
+}
 .answers{
     display: flex;
     flex-wrap: wrap;
@@ -138,6 +142,7 @@ aside {
             content: "\f00c";
             font-family: 'Font Awesome 5 Free';
             font-weight: 900;
+            text-align: center;
             color: #fff;
             position: absolute;
             top: 10px;
@@ -384,17 +389,35 @@ button {
     }
     .answer {
         width: 100%;
+        min-height: 39px;
 
         label {
             padding: 5px 35px 5px 25px;
+            font-size: .8rem;
 
             &::before {
-                top: 5px;
+                top: 3px;
             }
         }
         input:checked~label::after {
-            top: 5px;
+            top: 3px;
         }
     }
 }
+@media screen and (max-height: 450px) {
+    .chartContainer {
+        margin: 10px auto;
+        
+        .bar {
+            margin: 10px 0;
+        }
+    }
+    .popupBox h4, .popupBox button {
+        margin: 10px;
+    }
+    .hiddenOnMobile {
+        display: none;
+    }
+}
+
 
