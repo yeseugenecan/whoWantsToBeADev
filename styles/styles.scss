@@ -287,6 +287,11 @@ button {
     h4, p, button {
         margin: 25px;
     }
+    span {
+        font-family: 'Nunito',
+        sans-serif;
+        font-weight: 600;
+    }
 }
 
 .audienceChart .bar {
@@ -455,15 +460,23 @@ button {
         width: 46%;
     }
     .askAFriendBox {
+        display: flex;
+        flex-wrap: wrap;
         .imageContainer {
-            float: left;
             margin: 20px;
         }
+        .messageContainer {
+            flex: 1;
+            display: flex;
+            flex-wrap: wrap;
+        }
+        h4 {
+            flex: 1 0 100%;
+        }
+        button,
         p {
             text-align: left;
-        }
-        button {
-            margin-right: auto;
+            margin-left: 20px;
         }
 
     }

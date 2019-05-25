@@ -156,12 +156,16 @@ app.askFriend = () => {
         let hintIndex = app.hintAccuracy();
 
         //once its decided what the hint will be, it is displayed to the user.
-        $('.popup').html(`                
+        $('.popup').html(`
             <div class="takeOver">
-                <div class="popupBox">
-                    <h4>Message a Friend</h4>
-                    <p><span class="friend">Brent: </span>I'm pretty sure that the correct answer is ${app.randomizedAnswers[hintIndex]}.</p>
-                    <button class="close">Close</button>
+                <div class="popupBox askAFriendBox">
+                    <h4>Ask a Friend</h4>
+                    <div class="imageContainer"><img src="./assets/8BitBrent.png">
+                    </div>
+                    <div class="messageContainer">
+                        <p><span class="friend">Hi I'm Brent</span>, your friendly neighbourhood CTO. I'm pretty sure that the correct answer is <span>${app.randomizedAnswers[hintIndex]}</span>.</p >
+                        <button class="close">Close</button>
+                    </div>
                 </div>
             </div>`);
         app.isPaused = true;
