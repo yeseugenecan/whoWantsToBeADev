@@ -155,6 +155,7 @@ app.askFriend = () => {
         $('body').addClass('preventScrolling');
         let hintIndex = app.hintAccuracy();
 
+        let response = app.friendsResponse(app.level);
         //once its decided what the hint will be, it is displayed to the user.
         $('.popup').html(`
             <div class="takeOver">
@@ -163,7 +164,7 @@ app.askFriend = () => {
                     <div class="imageContainer"><img src="./assets/8BitBrent.png">
                     </div>
                     <div class="messageContainer">
-                        <p><span class="friend">Hi I'm Brent</span>, your friendly neighbourhood CTO. I'm pretty sure that the correct answer is <span>${app.randomizedAnswers[hintIndex]}</span>.</p >
+                        <p><span class="friend">Hi I'm Brent</span>, your friendly neighbourhood CTO. ${response} <span>${app.randomizedAnswers[hintIndex]}</span>.</p >
                         <button class="close">Close</button>
                     </div>
                 </div>
@@ -181,6 +182,17 @@ app.askFriend = () => {
         $('.askFriend').addClass('usedLifeline');
         $('.widgets').off('click', '.askFriend');
     });
+}
+
+//this is a helper function for ask a friend lifeline. It that adds a layer of humanity to our AI.
+app.friendsResponse = (level) =>{
+    if(level <5){
+        return "Why are you wasting my valuable time?. The answer obviously is: "
+    }
+    if(level <10){
+        return "While I'm not 100% sure, I think the correct answer is:"
+    }
+    return "Wow, this is tough one but if I had to guess, I would pick: "
 }
 
 app.askTheAudience = () => {
@@ -231,7 +243,7 @@ app.askTheAudience = () => {
                     <button>Close</button>
                 </div>
             </div>`);
-
+        
         app.isPaused = true;
         //create a graph with 4 bars based on the numbers specified by audiencePoll array. 
         for (i = 0; i < audiencePoll.length; i++) {
