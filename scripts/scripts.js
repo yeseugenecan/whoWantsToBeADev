@@ -241,14 +241,16 @@ app.askTheAudience = () => {
 //when called, loads the game over page.
 app.gameOver = () => {
     $('.widgets').empty();
-    $('.question').html(`<h2>GAME OVER BRAH!</h2><button class="reset">Play Again</button>`)
+    $('.question').html(`<h2>Game Over!</h2>
+    <p>Some people just aren't cut out to be developers.</p>
+    <button class="reset">Play Again</button>`)
     //if .reset is clicked, reset the game 
     app.resetGame();
 }
 //when called, loads the you won page.
 app.youWon = () => {
     $('.widgets').empty();
-    $('.question').html(`<h2>Congratulations You Won!</h2><p>Looks like you already are a developer</p><button class="reset">Play Again</button>`)
+    $('.question').html(`<h2>Congratulations!</h2><p>Looks like you are an awesome developer!</p><button class="reset">Play Again</button>`)
     //if .reset is clicked, reset the game 
     app.resetGame();
 }
@@ -326,8 +328,8 @@ app.loadNextQuestion = (question, correct, wrong) => {
 
 // when called loads the start screen.
 app.loadStartScreen = () => {
-    let frame = `<h2> Who wants to be a developer</h2>
-                    <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit.Officia dolores reprehenderit, facerequibusdam nihil modi error quia odio cumque minus!</p>
+    let frame = `<h2>Welcome</h2>
+                <p>Welcome to Who Wants to be a Developer! Answer all 15 questions to prove your computer science skills. If you get stuck, don't forget to use your lifelines – 50/50, Poll the Audience, and Ask a Friend.</p>
                     <button class="loading">Loading <i class="fas fa-long-arrow-alt-right"></i></button>`
     $('.question').html(frame);
 }

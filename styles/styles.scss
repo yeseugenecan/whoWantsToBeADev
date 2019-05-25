@@ -229,6 +229,17 @@ button {
     justify-content: flex-end;
     margin: 0;
 }
+.imageContainer {
+    overflow: hidden;
+    border-radius: 50%;
+    max-width: 125px;
+    border: 3px solid #547aa5;
+    margin: 0 auto;
+
+    img {
+        display: block;
+    }
+}
 
 .progressOuter {
     flex: 1 1 calc(60% - 4px);
@@ -442,6 +453,19 @@ button {
     }
     .answer {
         width: 46%;
+    }
+    .askAFriendBox {
+        .imageContainer {
+            float: left;
+            margin: 20px;
+        }
+        p {
+            text-align: left;
+        }
+        button {
+            margin-right: auto;
+        }
+
     }
 }
 

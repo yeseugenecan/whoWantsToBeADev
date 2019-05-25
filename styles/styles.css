@@ -469,6 +469,18 @@ button:hover, button:focus {
   margin: 0;
 }
 
+.imageContainer {
+  overflow: hidden;
+  border-radius: 50%;
+  max-width: 125px;
+  border: 3px solid #547aa5;
+  margin: 0 auto;
+}
+
+.imageContainer img {
+  display: block;
+}
+
 .progressOuter {
   -webkit-box-flex: 1;
       -ms-flex: 1 1 calc(60% - 4px);
@@ -705,6 +717,16 @@ button:hover, button:focus {
   }
   .answer {
     width: 46%;
+  }
+  .askAFriendBox .imageContainer {
+    float: left;
+    margin: 20px;
+  }
+  .askAFriendBox p {
+    text-align: left;
+  }
+  .askAFriendBox button {
+    margin-right: auto;
   }
 }
 /*# sourceMappingURL=styles.css.map */
