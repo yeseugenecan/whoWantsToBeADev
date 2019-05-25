@@ -38,6 +38,7 @@ app.incorrectAnswers = [];
 app.randomizedAnswers = [];
 app.correctIndex;
 app.userAnswer;
+app.isPaused = false;
 
 //this function takes in a the correct answer as well as the array of wrong answers and randomly injects the correct answer on the array of wrong answers.
 app.randomizeAnswers = (correct, wrongAnswer) => {
@@ -55,6 +56,8 @@ app.makeTimer = (timeLeft) => {
     $countdown = $(".countdown");
     $progressBar = $(".progressInner");
 
+    // app.isPaused = false;
+
     //display the initial time remaining on page
     $countdown.html(`<p>${timeLeft}</p>`);
     //define the width of the initial progress bar as 100;
@@ -62,11 +65,14 @@ app.makeTimer = (timeLeft) => {
     //set the width increment as a function of timeLeft.
     let widthIncrement = progressWidth / timeLeft / 100
     //define the setInterval function
-    let timer = setInterval(function () {
-        //reduce timeLeft in 0.01 second increments.
-        timeLeft = timeLeft - 1 / 100;
-        //reduce the width of the progress bar the size of the widthIncrement
-        progressWidth = progressWidth - widthIncrement;
+    let timer = setInterval(()=> {
+
+        if(!app.isPaused){
+            //reduce timeLeft in 0.01 second increments.
+            timeLeft = timeLeft - 1 / 100;
+            //reduce the width of the progress bar the size of the widthIncrement
+            progressWidth = progressWidth - widthIncrement;
+        }
         //display timeLeft on the html
         $countdown.html(`<p>${Math.round(timeLeft)}</p>`);
         ///update the width of the progress bar on html
@@ -158,11 +164,13 @@ app.askFriend = () => {
                     <button class="close">Close</button>
                 </div>
             </div>`);
+        app.isPaused = true;
         //once the user is done reading the hint, they click "close" to close the popup. Once the button is clicked, the popup is cleared and the event listener is turned off.
         $('.popup').on('click', '.close', () => {
             $('body').removeClass('preventScrolling');
             $('.popup').empty();
             $('.popup').off('click', '.close')
+            app.isPaused = false;
         });
 
         //once the lifeline has been used, add a class that greys the button out as well as turn off the event listener so the user can't use it again.
@@ -215,10 +223,12 @@ app.askTheAudience = () => {
                         <div class="bar2 bar"><p>C</p></div>
                         <div class="bar3 bar"><p>D</p></div>
                     </div>
+                    <p>The audience thinks <span class>${app.randomizedAnswers[hintIndex]}</span> is the right answer</p>
                     <button>Close</button>
                 </div>
             </div>`);
 
+        app.isPaused = true;
         //create a graph with 4 bars based on the numbers specified by audiencePoll array. 
         for (i = 0; i < audiencePoll.length; i++) {
             // dividing over maxPercent ensures that largest number always has a width of 100%.
@@ -230,6 +240,7 @@ app.askTheAudience = () => {
             $('body').removeClass('preventScrolling');
             $('.popup').empty();
             $('.popup').off('click', 'button')
+            app.isPaused = false;
         });
 
         //once the lifeline has been used, add a class that greys the button out as well as turn off the event listener so the user can't use it again.
