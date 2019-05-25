@@ -20,8 +20,17 @@ h3,
 h4,
 p{
     margin: 0;
-    font-family: 'Nunito', sans-serif;
+    font-family: 'Nunito Sans', sans-serif;
     color: #fff;
+}
+h2 {
+    font-family: 'Nunito', sans-serif;
+    font-weight: 600;
+}
+h3 {
+    font-size: 1.2rem;
+    font-family: 'Nunito', sans-serif;
+    font-weight: 600;
 }
 img {
     width: 100%;
@@ -33,7 +42,6 @@ header {
 }
 
 main {
-    flex-basis: 800px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -41,7 +49,10 @@ main {
 
 }
 
-label,
+label {
+    font-family: 'Nunito Sans', sans-serif;
+}
+
 input,
 button {
     font-family: 'Nunito', sans-serif;
@@ -62,7 +73,6 @@ h2 {
 }
 .game{
     display: flex;
-    min-height: 90vh;
     align-items: center;
 }
 
@@ -144,10 +154,9 @@ aside {
     label {
         color: #fff;
         width: 100%;
+        height: 100%;
         padding: 10px 35px 10px 25px;
         display: block;
-        font-family: 'Nunito',
-        sans-serif;
         position: relative;
         border-radius: 5px;
 
@@ -222,6 +231,7 @@ button {
     position: relative;
     background: none;
     border: 2px solid #547aa5;
+    overflow: hidden;
 }
 .progressInner {
     width: 100%;
@@ -233,7 +243,7 @@ button {
 .countdown {
     position: absolute;
     top: 10px;
-    left: 50%;
+    left: calc(50% - 10px);
 }
 .takeOver {
     position: absolute;
@@ -306,3 +316,85 @@ button {
     content: "D";
     
 }
+
+@media screen and (max-width: 1100px) {
+    .question h2 {
+        font-size: 1.8rem;
+    }
+    aside {
+        flex: 0 0 200px;
+
+        h3 {
+            font-size: .8rem;
+        }
+        p {
+            font-size: .8rem;
+        }
+    }
+    h1 {
+        flex: 0 0 200px;
+    }
+}
+@media screen and (max-width: 900px) {
+    .game {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    aside {
+        flex: 1 1 100%;
+        border-right: none;
+        border-bottom: solid 1px #4f5165;;
+        margin-bottom: 20px;
+        ul {
+            height: auto;
+            margin-top: 0;
+        }
+        li {
+            display: none;
+            h3 {
+                width: auto;
+                padding-right: 10px;
+                font-size: 1.3rem;
+            }
+            p {
+                width: auto;
+            }
+        }
+        
+        .currentQuestion {
+            display: flex;
+            justify-content: flex-start;
+        }
+    }
+    main {
+        padding-left: 0;
+    }
+}
+@media screen and (max-width: 600px) {
+    .hiddenOnMobile {
+        display: none;
+    }
+    .question {
+        h2 {
+            font-size: 1rem;
+        }
+    }
+    .widgets li {
+        margin-left: 10px;
+    }
+    .answer {
+        width: 100%;
+
+        label {
+            padding: 5px 35px 5px 25px;
+
+            &::before {
+                top: 5px;
+            }
+        }
+        input:checked~label::after {
+            top: 5px;
+        }
+    }
+}
+

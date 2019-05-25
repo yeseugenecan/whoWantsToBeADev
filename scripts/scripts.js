@@ -47,102 +47,20 @@ app.getQuestions = (difficulty) => {
     });
 }
 
-//this function takes in a the correct answer as well as the array of wrong answers and randomly injects the correct answer on the array of wrong answers.
+//this helper function takes in the correct answer of type string as well as the array of wrong answers and randomly injects the correct answer on the array of wrong answers.
 
 app.randomizeAnswers = (correct, wrongAnswer) => {
     //app.correctIndex stores the position of the correct answer on the array allAnswers
     app.correctIndex = Math.floor(Math.random() * 4);
-    const allAnswers = wrongAnswer;
+    //declare allAnswers initially as a copy of wrongAnswers
+    const allAnswers = [...wrongAnswer];
+    //inject the correctIndex randomly on allAnswers
     allAnswers.splice(app.correctIndex, 0, correct);
     return allAnswers;
 }
 
-// from https://bost.ocks.org/mike/shuffle/
-// app.shuffle = (array) => {
-//     let m = array.length, t, i;
-//     // While there remain elements to shuffle…
-//     while (m) {
-//         // Pick a remaining element…
-//         i = Math.floor(Math.random() * m--);
-//         // And swap it with the current element.
-//         t = array[m];
-//         array[m] = array[i];
-//         array[i] = t;
-//     }
-//     return array;
-// }
 
-app.loadNextQuestion = (question, correct, wrong) => {
-    app.randomizedAnswers = app.randomizeAnswers(correct[app.level], wrong[app.level]);
-    app.makeTimer(100);
-    console.log(`correct answer is: ${app.correctAnswers[app.level]}`);
-    let frame = `<h2>${question[app.level]}</h2>
-            <form action="">
-                <div class="answers">
-                    <div class="answer">
-                        <input type="radio" id="answer1" name="answers" value="0">
-                        <label for="answer1">A. <span>${app.randomizedAnswers[0]}</span></label>
-                    </div>
-                    <div class="answer">
-                        <input type="radio" id="answer2" name="answers" value="1">
-                        <label for="answer2">B. <span>${app.randomizedAnswers[1]}</span></label>
-                    </div>
-                    <div class="answer">
-                        <input type="radio" id="answer3" name="answers" value="2">
-                        <label for="answer3">C. <span>${app.randomizedAnswers[2]}</span></label>
-                    </div>
-                    <div class="answer">
-                        <input type="radio" id="answer4" name="answers" value="3">
-                        <label for="answer4">D. <span>${app.randomizedAnswers[3]}</span></label>
-                    </div>
-                </div>
-            </form>
-            <button class="submit">Submit <i class="fas fa-long-arrow-alt-right"></i></button>`
-    $('.question').html(frame);
-    $(`ul li:nth-child(${app.level + 1})`).addClass('currentQuestion');
-    $(`ul li:nth-child(${app.level})`).removeClass('currentQuestion');
-    
-}
-
-
-app.gameOver = () => {
-    $('.widgets').empty();
-    $('.question').html(`<h2>GAME OVER BRAH!</h2><button class="reset">Play Again</button>`)
-    app.resetGame();
-}
-
-app.resetGame = () => {
-    $('.question').on('click', '.reset', () => {
-        $(`ul li:nth-child(${app.level+1})`).removeClass('currentQuestion');
-        app.level = 0;
-        app.questions = [];
-        app.correctAnswers = [];
-        app.incorrectAnswers = [];
-        app.randomizedAnswers = [];
-        app.correctIndex = 0;
-        app.loadStartScreen();
-        app.getData();
-        app.fiftyFifty();
-        app.messageFriend();
-        app.askTheAudience();
-        $('.usedLifeline').removeClass('usedLifeline');
-        $('.question').off('click', '.reset');
-
-    })
-}
-app.loadStartScreen = () =>{
-    let frame =    `<h2> Who wants to be a developer</h2>
-                    <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit.Officia dolores reprehenderit, facerequibusdam nihil modi error quia odio cumque minus!</p>
-                    <button class="loading">Loading <i class="fas fa-long-arrow-alt-right"></i></button>`
-    $('.question').html(frame);
-}
-
-app.youWon = () => {
-    $('.widgets').hide();
-    $('.question').html(`<h2>Congratulations You Won!</h2><p>Looks like you already are a developer</p><button class="reset">Play Again</button>`)
-    app.resetGame();
-}
-
+//this helper function when called creates a timebar as well as a countdown of 60 seconds on screen. 
 app.makeTimer = (timeLeft) => {
 
     //declare jquery selectors for better performance
@@ -169,62 +87,55 @@ app.makeTimer = (timeLeft) => {
         if (timeLeft < 10) {
             $countdown.html(`<p>${Math.round(timeLeft * 10) / 10}</p>`);
         }
+        //on user clicking submit,
         $('.question').on('click', '.submit', () => {
-            if(app.userAnswer){
+            //only if user has selected an answer (ie app.userAnswer is not undefined) reset timer. 
+            if (app.userAnswer) {
                 clearInterval(timer);
             }
         });
-        //when width of the progress bar is zero, clearInterval and move to the next frame.
+        //when width of the progress bar is zero, clearInterval, completely hide the outer progress bar and push the user to the game over screne.
         if (progressWidth <= 0) {
             clearInterval(timer);
             $('.progressOuter').hide();
             app.gameOver();
-            // numberGame.makeFrameTwo();
         }
     }, 10);
 }
 
-app.loadWidget = () => {
-    $('.widgets').html(`
-        <div class="progressOuter">
-            <div class="progressInner"></div> 
-            <div class="countdown"><p>60</p></div>
-        </div>
-        <ul class="lifelines">
-            <li><button class="fiftyFifty"><i class="fas fa-divide"></i></button></li>
-            <li><button class="askTheAudience"><i class="fas fa-chart-bar"></i></button></li>
-            <li><button class="messageFriend"><i class="far fa-comment"></i></button></li> 
-        </ul>
-    `)
+//this is a helper function for fifty fifty. It picks two random indices that don't contain the correct answer to remove from the array.
+app.indicesToRemove = () => {
+    //declare an array of all the possible indices
+    let arrayOfIndices = [0, 1, 2, 3];
+    //first remove the correctIndex from the array.
+    arrayOfIndices.splice(app.correctIndex, 1);
+    //then pick a random index and remove it from the array as well.
+    let indextoRemove = Math.floor(Math.random() * 3);
+    arrayOfIndices.splice(indextoRemove, 1);
+    //return the remaining array.
+    return arrayOfIndices
 }
 
-//this is a helper function for fifty fifty. It picks two random indices that don't contain the correct answer to remove.
-app.indicesToRemove = () => {
-    let dummyArray = [0,1,2,3];
-    dummyArray.splice(app.correctIndex, 1);
-    let indextoRemove = Math.floor(Math.random() * 3);
-    dummyArray.splice(indextoRemove, 1);
-    return dummyArray
-}
-app.fiftyFifty = () =>{
-    $('.widgets').on('click', '.fiftyFifty', ()=>{
+//this is the fifty fifty lifeline. When user clicks fifty-fifty, it removes two random answers that are not the right answer
+app.fiftyFifty = () => {
+    $('.widgets').on('click', '.fiftyFifty', () => {
         let indicesToRemove = app.indicesToRemove();
         console.log(indicesToRemove)
-        $(`.answer:nth-child(${indicesToRemove[0]+1})`).empty();
-        $(`.answer:nth-child(${indicesToRemove[1]+1})`).empty();
+        $(`.answer:nth-child(${indicesToRemove[0] + 1})`).empty();
+        $(`.answer:nth-child(${indicesToRemove[1] + 1})`).empty();
         $('.fiftyFifty').addClass('usedLifeline');
         $('.widgets').off('click', '.fiftyFifty');
     })
 }
-app.messageFriend = () =>{
+app.messageFriend = () => {
     $('.widgets').on('click', '.messageFriend', () => {
         let randomizer = Math.random();
         let hintIndex = 0;
-        if(app.level < 5) {
+        if (app.level < 5) {
             hintIndex = app.correctIndex;
-        } else if(app.level < 10 && randomizer >= .2) {
+        } else if (app.level < 10 && randomizer >= .2) {
             hintIndex = app.correctIndex;
-        }  else if(app.level >= 10 && randomizer >= .5){
+        } else if (app.level >= 10 && randomizer >= .5) {
             hintIndex = app.correctIndex;
         } else {
             if (app.correctIndex === 0) {
@@ -256,15 +167,15 @@ app.askTheAudience = () => {
     $('.widgets').on('click', '.askTheAudience', () => {
         let randomizer = Math.random();
         let percent1 = getRandomArbitrary(0, 76);
-        let percent2 = getRandomArbitrary(0, 101-percent1);
-        let percent3 = getRandomArbitrary(0, 101-percent1-percent2);
-        let percent4 = 100-percent1-percent2-percent3;
+        let percent2 = getRandomArbitrary(0, 101 - percent1);
+        let percent3 = getRandomArbitrary(0, 101 - percent1 - percent2);
+        let percent4 = 100 - percent1 - percent2 - percent3;
         console.log(percent1, percent2, percent3, percent4);
 
         let audiencePoll = [percent1, percent2, percent3, percent4];
         let maxPercent = Math.max(...audiencePoll);
         indexOfMax = audiencePoll.indexOf(maxPercent);
-        audiencePoll.splice(indexOfMax,1);
+        audiencePoll.splice(indexOfMax, 1);
         console.log(audiencePoll);
 
         if (app.level < 5) {
@@ -296,8 +207,8 @@ app.askTheAudience = () => {
                     <button>Close</button>
                 </div>
             </div>`);
-        for(i=0; i<audiencePoll.length; i++){
-            $(`.bar${i}`).width(`${audiencePoll[i]/maxPercent*100}%`);
+        for (i = 0; i < audiencePoll.length; i++) {
+            $(`.bar${i}`).width(`${audiencePoll[i] / maxPercent * 100}%`);
             $(`.bar${i}>p`).html(`${audiencePoll[i]}%`);
         }
         $('.popup').on('click', 'button', () => {
@@ -306,9 +217,64 @@ app.askTheAudience = () => {
         });
         $('.askTheAudience').addClass('usedLifeline');
         $('.widgets').off('click', '.askTheAudience');
-    });
+    $(`ul li:nth-child(${app.level + 1})`).addClass('currentQuestion');
+    $(`ul li:nth-child(${app.level})`).removeClass('currentQuestion');
+    
 }
 
+
+app.gameOver = () => {
+    $('.widgets').empty();
+    $('.question').html(`<h2>GAME OVER BRAH!</h2><button class="reset">Play Again</button>`)
+    app.resetGame();
+}
+
+app.resetGame = () => {
+    $('.question').on('click', '.reset', () => {
+        $(`ul li:nth-child(${app.level+1})`).removeClass('currentQuestion');
+        app.level = 0;
+        app.questions = [];
+        app.correctAnswers = [];
+        app.incorrectAnswers = [];
+        app.randomizedAnswers = [];
+        app.correctIndex = 0;
+        app.loadStartScreen();
+        app.getData();
+        app.fiftyFifty();
+        app.messageFriend();
+        app.askTheAudience();
+        $('.usedLifeline').removeClass('usedLifeline');
+        $('h1').removeClass("hiddenOnMobile");
+        $('.question').off('click', '.reset');
+
+    })
+}
+app.loadStartScreen = () =>{
+    let frame =    `<h2> Who wants to be a developer</h2>
+                    <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit.Officia dolores reprehenderit, facerequibusdam nihil modi error quia odio cumque minus!</p>
+                    <button class="loading">Loading <i class="fas fa-long-arrow-alt-right"></i></button>`
+    $('.question').html(frame);
+}
+
+app.youWon = () => {
+    $('.widgets').hide();
+    $('.question').html(`<h2>Congratulations You Won!</h2><p>Looks like you already are a developer</p><button class="reset">Play Again</button>`)
+    app.resetGame();
+}
+
+app.loadWidget = () => {
+    $('.widgets').html(`
+        <div class="progressOuter">
+            <div class="progressInner"></div> 
+            <div class="countdown"><p>60</p></div>
+        </div>
+        <ul class="lifelines">
+            <li><button class="fiftyFifty"><i class="fas fa-divide"></i></button></li>
+            <li><button class="askTheAudience"><i class="fas fa-chart-bar"></i></button></li>
+            <li><button class="messageFriend"><i class="far fa-comment"></i></button></li> 
+        </ul>
+    `)
+}
 
 app.getData = async function () {
     console.log("-------------START OF A NEW ATTEMPT----------");
@@ -319,39 +285,6 @@ app.getData = async function () {
     arrayOfQuestions.forEach((arrayItem) => {
         app.questions.push(arrayItem.question);
         app.correctAnswers.push(arrayItem.correct_answer);
-        app.incorrectAnswers.push(arrayItem.incorrect_answers);
-    })
-    // console.log(app.questions);
-    $('.loading').html('Begin <i class="fas fa-long-arrow-alt-right"></i>').removeClass('loading').addClass('begin');
-
-}
-
-app.init = () => {
-    app.getData();
-    $('.question').on('click', '.begin', (e) => {
-        e.preventDefault();
-        app.loadWidget();
-        app.loadNextQuestion(app.questions, app.correctAnswers, app.incorrectAnswers);
-    })
-    $('.question').on('click', '.submit', () => {
-        app.userAnswer = $("input[name=answers]:checked").val();
-        console.log(app.userAnswer);
-        if(app.userAnswer){
-            $('.submit').hide();
-            $("input[name=answers]:checked ~ label").css('background', 'orange');
-            setTimeout(()=> {
-                if(app.correctIndex === parseInt(app.userAnswer, 10) && app.level === 14){
-                    $("input[name=answers]:checked ~ label").css('background', 'green');
-                    setTimeout(app.youWon(), 1000);
-                }
-                else if (app.correctIndex === parseInt(app.userAnswer, 10)) {
-                    $("input[name=answers]:checked ~ label").css('background', 'green');
-                    setTimeout(() => {
-                        console.log("correct"); 
-                        app.level++; 
-                        app.loadNextQuestion(app.questions, app.correctAnswers, app.incorrectAnswers)}, 1000);
-                }
-                else {
                     $("input[name=answers]:checked ~ label").css('background', 'red');
                     setTimeout(()=>{
                         $(`.answer:nth-child(${app.correctIndex+1}) > label`).css('background', 'green');
