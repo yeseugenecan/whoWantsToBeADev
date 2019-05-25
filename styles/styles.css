@@ -241,6 +241,7 @@ main {
       -ms-flex-pack: justify;
           justify-content: space-between;
   padding-left: 50px;
+  width: 100%;
 }
 
 footer {

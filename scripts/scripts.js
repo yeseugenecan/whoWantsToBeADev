@@ -445,6 +445,7 @@ app.init = () => {
         if (app.userAnswer) {
             //hide the submit button so user can't click submit again while waiting to see if they got the right answer.
             $('.submit').hide();
+            $('.widgets').hide();
 
              //color the users choice to orange before setting a timeout.
             $("input[name=answers]:checked ~ label").css('background', '#f39c12');
@@ -466,7 +467,8 @@ app.init = () => {
                         //increment the level
                         app.level++;
                         //take the user to the next question.
-                        app.loadNextQuestion(app.questions, app.correctAnswers, app.incorrectAnswers)
+                        app.loadNextQuestion(app.questions, app.correctAnswers, app.incorrectAnswers);
+                        $('.widgets').show();
                     }, 1000);
                 }
                 else {
