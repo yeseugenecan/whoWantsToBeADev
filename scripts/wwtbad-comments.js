@@ -126,13 +126,14 @@ app.hintAccuracy = () =>{
     let randomizer = Math.random();
     if (app.level < 5) {
         return app.correctIndex;
-    } else 
-    if (app.level < 10 && randomizer >= .2) {
+    } 
+    else if (app.level < 10 && randomizer >= .2) {
         return app.correctIndex;
-    } else 
-    if (app.level >= 10 && randomizer >= .5) {
+    } 
+    else if (app.level >= 10 && randomizer >= .5) {
         return app.correctIndex;
-    } else {
+    } 
+    else {
         if (app.correctIndex === 0) {
             return app.correctIndex + 1;
         } 
@@ -395,6 +396,10 @@ app.getData = async function () {
 
 }
 
+app.gamePlay = () =>{
+    
+}
+
 app.init = () => {
     //get the Data from the API
     app.getData();
@@ -402,39 +407,49 @@ app.init = () => {
     $('.question').on('click', '.begin', (e) => {
         //prevent default behaviour of the button.
         e.preventDefault();
+        
+        //hide the logo on mobile view
         $('h1').addClass("hiddenOnMobile");
+
         //load all the widgets
         app.loadWidgets();
 
         //load the next question
         app.loadNextQuestion(app.questions, app.correctAnswers, app.incorrectAnswers);
     })
-
     $('.question').on('click', '.submit', (e) => {
         //prevent default behaviour of the button.
         e.preventDefault();
+
         //store the index of the value of the input the user checked when they submitted the button. 
         app.userAnswer = $("input[name=answers]:checked").val();
+
         console.log(app.userAnswer);
 
         //check if the user answer has a value. If its undefined, don't do anything and wait for the user to chose an answer.
         if (app.userAnswer) {
+
+            //parse the string into an int to make value comparison easier.
+            app.userAnswer = parseInt(app.userAnswer, 10);
+
+            //color the users choice to orange before setting a timeout.
+            $("input[name=answers]:checked ~ label").css('background', '#f39c12');
+
             //hide the submit button so user can't click submit again while waiting to see if they got the right answer.
             $('.submit').hide();
 
-             //color the users choice to orange before setting a timeout.
-            $("input[name=answers]:checked ~ label").css('background', '#f39c12');
             //set a timeout of 1 second between the submit and revealing whether the user got the right answer. 
             setTimeout(() => {
                 //if user got the right answer and are at the last question, then first reveal that they got the question right, then move them to the you won page.
-                if (app.correctIndex === parseInt(app.userAnswer, 10) && app.level === 14) {
+                if (app.correctIndex === app.userAnswer && app.level === 14) {
                     //color the answer green because the user was right.
                     $("input[name=answers]:checked ~ label").css('background', '#49E68D');
                     //show that the user was correct for a second.
-                    setTimeout(app.youWon(), 1000);
+                    setTimeout(() => {app.youWon()}, 1000);
                 }
+
                 //if user is right, reveal that they got the question right, then move them to the you won page.
-                else if (app.correctIndex === parseInt(app.userAnswer, 10)) {
+                else if (app.correctIndex === app.userAnswer) {
                     //color the answer green because the user was right.
                     $("input[name=answers]:checked ~ label").css('background', '#49E68D');
                     //show that the user was correct for a second.
@@ -445,8 +460,9 @@ app.init = () => {
                         app.loadNextQuestion(app.questions, app.correctAnswers, app.incorrectAnswers)
                     }, 1000);
                 }
+                //if all the if statement above were skipped, it means that the user got the wrong answer.
                 else {
-                    //color the answer red because the user was wrong.
+                    ////color the answer red because the user was wrong.
                     $("input[name=answers]:checked ~ label").css('background', '#e74c3c');
                     //set a timeout to display the user that they were wrong for a second.
                     setTimeout(() => {
@@ -455,6 +471,7 @@ app.init = () => {
                         //and finally take them to the game over page after a second.
                         setTimeout(() => { app.gameOver() }, 1000)
                     }, 1000);
+
                 }
             }, 1000);
         }
