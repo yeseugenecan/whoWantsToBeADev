@@ -321,7 +321,6 @@ app.loadNextQuestion = (question, correct, wrong) => {
     
     //generate a timer to be displayed to the user.
     app.makeTimer(60);
-    console.log(`correct answer is: ${app.correctAnswers[app.level]}`);
     
     //generate the frame that displays the question along with the answers to the user.
     let frame = `<h2>${question[app.level]}</h2>
@@ -400,8 +399,6 @@ app.getQuestions = (difficulty) => {
 //https://opentdb.com/
 
 app.getData = async function () {
-    console.log("-------------START OF A NEW ATTEMPT----------");
-
     //GET 5 easy questions
     const easyQuestions = await app.getQuestions('easy');
     //GET 5 medium questions
@@ -444,8 +441,6 @@ app.init = () => {
         e.preventDefault();
         //store the index of the value of the input the user checked when they submitted the button. 
         app.userAnswer = $("input[name=answers]:checked").val();
-        console.log(app.userAnswer);
-
         //check if the user answer has a value. If its undefined, don't do anything and wait for the user to chose an answer.
         if (app.userAnswer) {
             //hide the submit button so user can't click submit again while waiting to see if they got the right answer.

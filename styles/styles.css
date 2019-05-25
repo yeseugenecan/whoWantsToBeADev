@@ -243,6 +243,15 @@ main {
   padding-left: 50px;
 }
 
+footer {
+  padding: 30px 0 20px;
+}
+
+footer p {
+  color: #4f5165;
+  font-size: .8rem;
+}
+
 label {
   font-family: 'Nunito Sans', sans-serif;
 }
@@ -305,7 +314,7 @@ aside ul {
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
-  height: 80vh;
+  height: 70vh;
 }
 
 aside li {
@@ -699,6 +708,9 @@ button:hover, button:focus {
   }
   .answer input:checked ~ label::after {
     top: 3px;
+  }
+  footer {
+    text-align: center;
   }
 }
 
