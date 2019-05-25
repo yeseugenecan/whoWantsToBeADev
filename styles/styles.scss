@@ -1,18 +1,20 @@
 @import "_setup.scss";
 
-*{
+* {
     // border: 1px solid white;
 }
 
-html{
+html {
     font-size: 125%;
 }
-body{
+
+body {
     font-size: 1rem;
     background: linear-gradient(#1f1f2e, #0a0f15);
     min-height: 100vh;
-    
+
 }
+
 .preventScrolling {
     overflow: hidden;
 }
@@ -22,24 +24,28 @@ h2,
 h3,
 h4,
 li,
-p{
+p {
     margin: 0;
     font-family: 'Nunito Sans', sans-serif;
     color: #fff;
 }
+
 h2 {
     font-family: 'Nunito', sans-serif;
     font-weight: 600;
     font-size: 2rem;
 }
+
 h3 {
     font-size: 1.2rem;
     font-family: 'Nunito', sans-serif;
     font-weight: 600;
 }
+
 img {
     width: 100%;
 }
+
 header {
     display: flex;
     padding: 20px 0;
@@ -68,16 +74,18 @@ h1 {
     font-weight: 600;
     flex: 0 0 300px;
 
-    img{
-        width: 150px;;
+    img {
+        width: 150px;
+        ;
     }
 }
-.game{
+
+.game {
     display: flex;
     align-items: center;
 }
 
-.wrapper{
+.wrapper {
     max-width: 1600px;
     width: 90%;
     margin: 0 auto;
@@ -86,49 +94,54 @@ h1 {
 aside {
     flex: 0 0 300px;
     display: flex;
-    flex-direction: column; 
+    flex-direction: column;
     border-right: solid 1px #4f5165;
-    ul{
+
+    ul {
         padding: 0;
         display: flex;
         flex-direction: column;
         justify-content: space-between;
         height: 80vh;
     }
-    li{
+
+    li {
         display: flex;
         justify-content: space-between;
         align-items: center;
         opacity: 0.2;
 
-        p{
+        p {
             font-weight: 300;
             color: #80808a;
             width: 50%;
             padding: 0 10px;
         }
 
-        h3{
+        h3 {
             width: 50%;
             border-right: solid 3px #4f5165;
         }
     }
+
     .currentQuestion {
         opacity: 1;
     }
 }
+
 .question {
     button {
         margin: 20px 0;
     }
 }
-.answers{
+
+.answers {
     display: flex;
     flex-wrap: wrap;
     margin: 0 -2%;
 }
 
-.answer{
+.answer {
     width: 46%;
     margin: 2%;
     min-height: 48px;
@@ -140,7 +153,12 @@ aside {
         position: absolute;
         opacity: 0;
 
-        &:checked ~ label::after {
+        &:focus ~ label,
+        &:hover ~ label {
+            background: rgba(255, 255, 255, 0.1)
+        }
+
+        &:checked~label::after {
             content: "\f00c";
             font-family: 'Font Awesome 5 Free';
             font-weight: 900;
@@ -187,10 +205,12 @@ button {
     padding: 5px 20px;
     border-radius: 20px;
 
-    &:hover, &:focus {
-        background-color: darken( #50d8d7, 20%);
+    &:hover,
+    &:focus {
+        background-color: darken(#50d8d7, 20%);
     }
 }
+
 .loading {
     background-color: #888;
 
@@ -199,29 +219,40 @@ button {
         background-color: #888;
     }
 }
-.widgets{
+
+.widgets {
     display: flex;
     flex: 1 1 500px;
     align-items: center;
-    li{
+
+    li {
         margin-left: 20px;
-        button{
+
+        button {
             width: 50px;
             height: 50px;
             border-radius: 50%;
             background: none;
             border: 2px solid #547aa5;
             padding: 0;
+
+            &:not(.usedLifeline):hover,
+            &:not(.usedLifeline):focus {
+                opacity: 0.7;
+            }
         }
-        i{
+
+        i {
             color: white;
         }
     }
-    .usedLifeline{
+
+    .usedLifeline {
         opacity: 0.1;
     }
 }
-.lifelines{
+
+.lifelines {
     flex: 1 1 40%;
     list-style: none;
     padding: 0;
@@ -229,6 +260,7 @@ button {
     justify-content: flex-end;
     margin: 0;
 }
+
 .imageContainer {
     overflow: hidden;
     border-radius: 50%;
@@ -251,6 +283,7 @@ button {
     border: 2px solid #547aa5;
     overflow: hidden;
 }
+
 .progressInner {
     width: 100%;
     height: 46px;
@@ -258,11 +291,13 @@ button {
     border-radius: 25px;
     border: solid 1px #1f1f2e;
 }
+
 .countdown {
     position: absolute;
     top: 10px;
     left: calc(50% - 10px);
 }
+
 .takeOver {
     position: absolute;
     display: flex;
@@ -275,6 +310,7 @@ button {
     justify-content: center;
     align-items: center;
 }
+
 .popupBox {
     width: 500px;
     margin: 20px 20px;
@@ -284,12 +320,15 @@ button {
     text-align: center;
     z-index: 101;
 
-    h4, p, button {
+    h4,
+    p,
+    button {
         margin: 25px;
     }
+
     span {
         font-family: 'Nunito',
-        sans-serif;
+            sans-serif;
         font-weight: 600;
     }
 }
@@ -310,101 +349,121 @@ button {
         color: white;
         top: 0;
     }
-    p{
+
+    p {
         color: #fff;
         margin: 0;
     }
-    
+
 }
-.chartContainer{
+
+.chartContainer {
     width: calc(100% - 80px);
     margin: 40px auto;
     border-left: solid 1px white;
     border-bottom: solid 1px white;
     padding: 1px 0 1px;
 }
-.bar0:before{
+
+.bar0:before {
     content: "A";
-    
+
 }
-.bar1:before{
+
+.bar1:before {
     content: "B";
-    
+
 }
-.bar2:before{
+
+.bar2:before {
     content: "C";
-    
+
 }
-.bar3:before{
+
+.bar3:before {
     content: "D";
-    
+
 }
 
 @media screen and (max-width: 1100px) {
     .question h2 {
         font-size: 1.8rem;
     }
+
     aside {
         flex: 0 0 200px;
 
         h3 {
             font-size: .8rem;
         }
+
         p {
             font-size: .8rem;
         }
     }
+
     h1 {
         flex: 0 0 200px;
     }
 }
+
 @media screen and (max-width: 900px) {
     .game {
         flex-direction: column;
         align-items: stretch;
     }
+
     aside {
         flex: 1 1 100%;
         border-right: none;
-        border-bottom: solid 1px #4f5165;;
+        border-bottom: solid 1px #4f5165;
         margin-bottom: 20px;
+
         ul {
             height: auto;
             margin-top: 0;
         }
+
         li {
             display: none;
+
             h3 {
                 width: auto;
                 padding-right: 10px;
                 font-size: 1.3rem;
             }
+
             p {
                 width: auto;
             }
         }
-        
+
         .currentQuestion {
             display: flex;
             justify-content: flex-start;
         }
     }
+
     main {
         padding-left: 0;
     }
 }
+
 @media screen and (max-width: 600px) {
     .hiddenOnMobile {
         display: none;
     }
+
     .question {
         h2 {
             font-size: 1rem;
         }
     }
+
     .widgets li {
         margin-left: 10px;
     }
+
     .answer {
         width: 100%;
         min-height: 39px;
@@ -417,62 +476,78 @@ button {
                 top: 3px;
             }
         }
-        input:checked~label::after {
+
+        input:checked ~ label::after {
             top: 3px;
         }
     }
 }
+
 @media screen and (max-height: 450px) {
     .question {
         h2 {
             font-size: 1rem;
         }
     }
+
     .chartContainer {
         margin: 10px auto;
-        
+
         .bar {
             margin: 10px 0;
         }
     }
-    .popupBox h4, .popupBox button {
+
+    .popupBox h4,
+    .popupBox button {
         margin: 10px;
     }
+
     .hiddenOnMobile {
         display: block;
         opacity: 0;
     }
+
     .currentQuestion {
         position: absolute;
         top: 30px;
+
         h3 {
             font-size: 1rem;
         }
     }
+
     aside {
         margin: 0;
         border: none;
+
         ul {
             margin: 0;
         }
     }
+
     .answer {
         width: 46%;
     }
+
     .askAFriendBox {
         display: flex;
         flex-wrap: wrap;
+
         .imageContainer {
             margin: 20px;
         }
+
         .messageContainer {
             flex: 1;
             display: flex;
             flex-wrap: wrap;
         }
+
         h4 {
             flex: 1 0 100%;
         }
+
         button,
         p {
             text-align: left;
@@ -481,5 +556,3 @@ button {
 
     }
 }
-
-

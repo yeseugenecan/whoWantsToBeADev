@@ -364,6 +364,11 @@ aside .currentQuestion {
   opacity: 0;
 }
 
+.answer input:focus ~ label,
+.answer input:hover ~ label {
+  background: rgba(255, 255, 255, 0.1);
+}
+
 .answer input:checked ~ label::after {
   content: "\f00c";
   font-family: 'Font Awesome 5 Free';
@@ -444,6 +449,10 @@ button:hover, button:focus {
   background: none;
   border: 2px solid #547aa5;
   padding: 0;
+}
+
+.widgets li button:not(.usedLifeline):hover, .widgets li button:not(.usedLifeline):focus {
+  opacity: 0.7;
 }
 
 .widgets li i {
@@ -539,7 +548,9 @@ button:hover, button:focus {
   z-index: 101;
 }
 
-.popupBox h4, .popupBox p, .popupBox button {
+.popupBox h4,
+.popupBox p,
+.popupBox button {
   margin: 25px;
 }
 
@@ -699,7 +710,8 @@ button:hover, button:focus {
   .chartContainer .bar {
     margin: 10px 0;
   }
-  .popupBox h4, .popupBox button {
+  .popupBox h4,
+  .popupBox button {
     margin: 10px;
   }
   .hiddenOnMobile {

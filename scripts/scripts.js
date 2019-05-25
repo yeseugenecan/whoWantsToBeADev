@@ -318,7 +318,7 @@ app.loadNextQuestion = (question, correct, wrong) => {
     app.randomizedAnswers = app.randomizeAnswers(correct[app.level], wrong[app.level]);
     
     //generate a timer to be displayed to the user.
-    app.makeTimer(10);
+    app.makeTimer(60);
     console.log(`correct answer is: ${app.correctAnswers[app.level]}`);
     
     //generate the frame that displays the question along with the answers to the user.
