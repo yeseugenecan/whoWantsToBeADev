@@ -25,7 +25,7 @@
 // App.init
 // App.getdata
 // App.loadstartbutton
-// app.loadwidget and app.loadnextquestion
+// app.loadWidgets and app.loadnextquestion
 // 
 //
 
@@ -151,6 +151,7 @@ app.hintAccuracy = () =>{
 //this is the Ask a Friend widget. It creates a pop up that offers the user a hint. Hint accuracy is controlled by the app.hintAccuracy() function.
 app.askFriend = () => {
     $('.widgets').on('click', '.askFriend', () => {
+        //prevent scrolling when the pop up appears
         $('body').addClass('preventScrolling');
         let hintIndex = app.hintAccuracy();
 
@@ -183,6 +184,7 @@ app.askTheAudience = () => {
     }
 
     $('.widgets').on('click', '.askTheAudience', () => {
+        //prevent scrolling when the pop up appears
         $('body').addClass('preventScrolling');
         //generate 4 random percentages to be displayed to the user. First percent is limited to 75% so that numbers are more evenly distributed.
         let percent1 = getRandomArbitrary(0, 76);
@@ -222,47 +224,81 @@ app.askTheAudience = () => {
                     <button>Close</button>
                 </div>
             </div>`);
+
+        //create a graph with 4 bars based on the numbers specified by audiencePoll array. 
         for (i = 0; i < audiencePoll.length; i++) {
+            // dividing over maxPercent ensures that largest number always has a width of 100%.
             $(`.bar${i}`).width(`${audiencePoll[i] / maxPercent * 100}%`);
             $(`.bar${i}>p`).html(`${audiencePoll[i]}%`);
         }
+        //once the user is done reading the hint, they click "close" to close the popup. Once the button is clicked, the popup is cleared and the event listener is turned off.
         $('.popup').on('click', 'button', () => {
             $('body').removeClass('preventScrolling');
             $('.popup').empty();
             $('.popup').off('click', 'button')
         });
+
+        //once the lifeline has been used, add a class that greys the button out as well as turn off the event listener so the user can't use it again.
         $('.askTheAudience').addClass('usedLifeline');
         $('.widgets').off('click', '.askTheAudience');
     });
 }
 
+//when called, loads the game over page.
 app.gameOver = () => {
     $('.widgets').empty();
     $('.question').html(`<h2>GAME OVER BRAH!</h2><button class="reset">Play Again</button>`)
+    //if .reset is clicked, reset the game 
+    app.resetGame();
+}
+//when called, loads the you won page.
+app.youWon = () => {
+    $('.widgets').empty();
+    $('.question').html(`<h2>Congratulations You Won!</h2><p>Looks like you already are a developer</p><button class="reset">Play Again</button>`)
+    //if .reset is clicked, reset the game 
     app.resetGame();
 }
 
+//when called activates the event listener to reset the game. 
 app.resetGame = () => {
     $('.question').on('click', '.reset', () => {
-        $(`ul li:nth-child(${app.level + 1})`).removeClass('currentQuestion');
+        //remove all the styling that gives indication of the current question.
+        $(`aside li:nth-child(${app.level + 1})`).removeClass('currentQuestion');
+        
+        //reset all game variables.
         app.level = 0;
         app.questions = [];
         app.correctAnswers = [];
         app.incorrectAnswers = [];
         app.randomizedAnswers = [];
         app.correctIndex = 0;
+        
+        //take the user back to the start screen and make a new API call.
         app.loadStartScreen();
         app.getData();
-        $('.usedLifeline').removeClass('usedLifeline');
-        $('h1').removeClass("hiddenOnMobile");
-        $('.question').off('click', '.reset');
 
+        //remove usedLifeLine class from all lifelines so they longer appear greyed out.
+        $('.usedLifeline').removeClass('usedLifeline');
+
+        //remove class that hides the logo to display on the start screen.
+        $('h1').removeClass("hiddenOnMobile");
+
+        //turn off the event listener for .reset button.
+        $('.question').off('click', '.reset');
     })
 }
+
+//when called loads the Next Question with all the wid
 app.loadNextQuestion = (question, correct, wrong) => {
+    
+    //first randomly inject the correct answer into the array of randomizedAnswers.
     app.randomizedAnswers = app.randomizeAnswers(correct[app.level], wrong[app.level]);
+    
+    //generate a timer to be displayed to the user.
     app.makeTimer(10);
     console.log(`correct answer is: ${app.correctAnswers[app.level]}`);
+    
+    //generate the frame that displays the question along with the answers to the user.
     let frame = `<h2>${question[app.level]}</h2>
             <form action="">
                 <div class="answers">
@@ -285,11 +321,16 @@ app.loadNextQuestion = (question, correct, wrong) => {
                 </div>
             </form>
             <button class="submit">Submit <i class="fas fa-long-arrow-alt-right"></i></button>`
+
+    //load the question to the user.
     $('.question').html(frame);
-    $(`ul li:nth-child(${app.level + 1})`).addClass('currentQuestion');
-    $(`ul li:nth-child(${app.level})`).removeClass('currentQuestion');
+    //iterate the class of currentQuestion on the next list item so that next list item is highlighted.
+    $(`aside li:nth-child(${app.level + 1})`).addClass('currentQuestion');
+    $(`aside li:nth-child(${app.level})`).removeClass('currentQuestion');
 
 }
+
+// when called loads the start screen.
 app.loadStartScreen = () => {
     let frame = `<h2> Who wants to be a developer</h2>
                     <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit.Officia dolores reprehenderit, facerequibusdam nihil modi error quia odio cumque minus!</p>
@@ -297,15 +338,9 @@ app.loadStartScreen = () => {
     $('.question').html(frame);
 }
 
-app.youWon = () => {
-    $('.widgets').hide();
-    $('.question').html(`<h2>Congratulations You Won!</h2><p>Looks like you already are a developer</p><button class="reset">Play Again</button>`)
-    app.resetGame();
-}
 
-
-
-app.loadWidget = () => {
+// when called loads the widgets bar along with all the individual widget listeners. 
+app.loadWidgets = () => {
     $('.widgets').html(`
         <div class="progressOuter">
             <div class="progressInner"></div> 
@@ -317,7 +352,10 @@ app.loadWidget = () => {
             <li><button class="askFriend"><i class="far fa-comment"></i></button></li> 
         </ul>
     `)
+    //before turning on any widget, make sure all their event listeners are off.
     $('.widgets').off();
+
+    //turn on all the event listeners for all the widgets.
     app.fiftyFifty();
     app.askFriend();
     app.askTheAudience();
@@ -345,7 +383,7 @@ app.init = () => {
     $('.question').on('click', '.begin', (e) => {
         $('h1').addClass("hiddenOnMobile");
         e.preventDefault();
-        app.loadWidget();
+        app.loadWidgets();
         app.loadNextQuestion(app.questions, app.correctAnswers, app.incorrectAnswers);
     })
     $('.question').on('click', '.submit', () => {
