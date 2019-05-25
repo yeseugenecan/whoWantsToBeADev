@@ -36,7 +36,8 @@ app.questions = [];
 app.correctAnswers = [];
 app.incorrectAnswers = [];
 app.randomizedAnswers = [];
-app.randomIndex;
+app.correctIndex;
+app.userAnswer;
 
 app.getQuestions = (difficulty) => {
     return $.ajax({
@@ -45,10 +46,14 @@ app.getQuestions = (difficulty) => {
         dataType: `json`
     });
 }
+
+//this function takes in a the correct answer as well as the array of wrong answers and randomly injects the correct answer on the array of wrong answers.
+
 app.randomizeAnswers = (correct, wrongAnswer) => {
-    app.randomIndex = Math.floor(Math.random() * 4);
+    //app.correctIndex stores the position of the correct answer on the array allAnswers
+    app.correctIndex = Math.floor(Math.random() * 4);
     const allAnswers = wrongAnswer;
-    allAnswers.splice(app.randomIndex, 0, correct);
+    allAnswers.splice(app.correctIndex, 0, correct);
     return allAnswers;
 }
 
@@ -114,7 +119,7 @@ app.resetGame = () => {
         app.correctAnswers = [];
         app.incorrectAnswers = [];
         app.randomizedAnswers = [];
-        app.randomIndex = 0;
+        app.correctIndex = 0;
         app.loadStartScreen();
         app.getData();
         app.fiftyFifty();
@@ -165,7 +170,9 @@ app.makeTimer = (timeLeft) => {
             $countdown.html(`<p>${Math.round(timeLeft * 10) / 10}</p>`);
         }
         $('.question').on('click', '.submit', () => {
-            clearInterval(timer);
+            if(app.userAnswer){
+                clearInterval(timer);
+            }
         });
         //when width of the progress bar is zero, clearInterval and move to the next frame.
         if (progressWidth <= 0) {
@@ -194,8 +201,7 @@ app.loadWidget = () => {
 //this is a helper function for fifty fifty. It picks two random indices that don't contain the correct answer to remove.
 app.indicesToRemove = () => {
     let dummyArray = [0,1,2,3];
-    var correctIndex = dummyArray.indexOf(app.randomIndex);
-    dummyArray.splice(correctIndex, 1);
+    dummyArray.splice(app.correctIndex, 1);
     let indextoRemove = Math.floor(Math.random() * 3);
     dummyArray.splice(indextoRemove, 1);
     return dummyArray
@@ -215,16 +221,16 @@ app.messageFriend = () =>{
         let randomizer = Math.random();
         let hintIndex = 0;
         if(app.level < 5) {
-            hintIndex = app.randomIndex;
+            hintIndex = app.correctIndex;
         } else if(app.level < 10 && randomizer >= .2) {
-            hintIndex = app.randomIndex;
+            hintIndex = app.correctIndex;
         }  else if(app.level >= 10 && randomizer >= .5){
-            hintIndex = app.randomIndex;
+            hintIndex = app.correctIndex;
         } else {
-            if (app.randomIndex === 0) {
-                hintIndex = app.randomIndex + 1;
+            if (app.correctIndex === 0) {
+                hintIndex = app.correctIndex + 1;
             } else {
-                hintIndex = app.randomIndex - 1;
+                hintIndex = app.correctIndex - 1;
             }
         }
         $('.popup').html(`                
@@ -262,16 +268,16 @@ app.askTheAudience = () => {
         console.log(audiencePoll);
 
         if (app.level < 5) {
-            hintIndex = app.randomIndex;
+            hintIndex = app.correctIndex;
         } else if (app.level < 10 && randomizer >= .2) {
-            hintIndex = app.randomIndex;
+            hintIndex = app.correctIndex;
         } else if (app.level >= 10 && randomizer >= .5) {
-            hintIndex = app.randomIndex;
+            hintIndex = app.correctIndex;
         } else {
-            if (app.randomIndex === 0) {
-                hintIndex = app.randomIndex + 1;
+            if (app.correctIndex === 0) {
+                hintIndex = app.correctIndex + 1;
             } else {
-                hintIndex = app.randomIndex - 1;
+                hintIndex = app.correctIndex - 1;
             }
         }
         audiencePoll.splice(hintIndex, 0, maxPercent);
@@ -328,28 +334,33 @@ app.init = () => {
         app.loadNextQuestion(app.questions, app.correctAnswers, app.incorrectAnswers);
     })
     $('.question').on('click', '.submit', () => {
-        let userAnswer = $("input[name=answers]:checked").val();
-        $("input[name=answers]:checked ~ label").css('background', 'orange');
-        setTimeout(()=> {
-            if(app.randomIndex === parseInt(userAnswer, 10) && app.level === 14){
-                $("input[name=answers]:checked ~ label").css('background', 'green');
-                setTimeout(app.youWon(), 1000);
-            }
-            else if (app.randomIndex === parseInt(userAnswer, 10)) {
-                $("input[name=answers]:checked ~ label").css('background', 'green');
-                setTimeout(() => {
-                    console.log("correct"); 
-                    app.level++; 
-                    app.loadNextQuestion(app.questions, app.correctAnswers, app.incorrectAnswers)}, 1000);
-            }
-            else {
-                $("input[name=answers]:checked ~ label").css('background', 'red');
-                setTimeout(()=>{
-                    app.gameOver();
-                }   , 1000);
-            
-            }
-        }, 1000);
+        app.userAnswer = $("input[name=answers]:checked").val();
+        console.log(app.userAnswer);
+        if(app.userAnswer){
+            $('.submit').hide();
+            $("input[name=answers]:checked ~ label").css('background', 'orange');
+            setTimeout(()=> {
+                if(app.correctIndex === parseInt(app.userAnswer, 10) && app.level === 14){
+                    $("input[name=answers]:checked ~ label").css('background', 'green');
+                    setTimeout(app.youWon(), 1000);
+                }
+                else if (app.correctIndex === parseInt(app.userAnswer, 10)) {
+                    $("input[name=answers]:checked ~ label").css('background', 'green');
+                    setTimeout(() => {
+                        console.log("correct"); 
+                        app.level++; 
+                        app.loadNextQuestion(app.questions, app.correctAnswers, app.incorrectAnswers)}, 1000);
+                }
+                else {
+                    $("input[name=answers]:checked ~ label").css('background', 'red');
+                    setTimeout(()=>{
+                        $(`.answer:nth-child(${app.correctIndex+1}) > label`).css('background', 'green');
+                        setTimeout(()=>{app.gameOver()}, 1000)       
+                    }   , 1000);
+                
+                }
+            }, 1000);
+        }
     })
     app.fiftyFifty();
     app.messageFriend();
