@@ -52,25 +52,53 @@ app.getQuestions = (difficulty) => {
 app.randomizeAnswers = (correct, wrongAnswer) => {
     //app.correctIndex stores the position of the correct answer on the array allAnswers
     app.correctIndex = Math.floor(Math.random() * 4);
-    const allAnswers = wrongAnswer;
+    //declare allAnswers initially as a copy of wrongAnswers
+    const allAnswers = [...wrongAnswer];
+    //inject the correctIndex randomly on allAnswers
     allAnswers.splice(app.correctIndex, 0, correct);
     return allAnswers;
 }
+app.makeTimer = (timeLeft) => {
 
-// from https://bost.ocks.org/mike/shuffle/
-// app.shuffle = (array) => {
-//     let m = array.length, t, i;
-//     // While there remain elements to shuffle…
-//     while (m) {
-//         // Pick a remaining element…
-//         i = Math.floor(Math.random() * m--);
-//         // And swap it with the current element.
-//         t = array[m];
-//         array[m] = array[i];
-//         array[i] = t;
-//     }
-//     return array;
-// }
+    //declare jquery selectors for better performance
+    $countdown = $(".countdown");
+    $progressBar = $(".progressInner");
+
+    //display the initial time remaining on page
+    $countdown.html(`<p>${timeLeft}</p>`);
+    //define the width of the initial progress bar as 100;
+    let progressWidth = 100;
+    //set the width increment as a function of timeLeft.
+    let widthIncrement = progressWidth / timeLeft / 100
+    //define the setInterval function
+    let timer = setInterval(function () {
+        //reduce timeLeft in 0.01 second increments.
+        timeLeft = timeLeft - 1 / 100;
+        //reduce the width of the progress bar the size of the widthIncrement
+        progressWidth = progressWidth - widthIncrement;
+        //display timeLeft on the html
+        $countdown.html(`<p>${Math.round(timeLeft)}</p>`);
+        ///update the width of the progress bar on html
+        $progressBar.width(`${progressWidth}%`);
+        //when timeLeft is less than 1 second, make seconds singular ie. second
+        if (timeLeft < 10) {
+            $countdown.html(`<p>${Math.round(timeLeft * 10) / 10}</p>`);
+        }
+        //on user clicking submit,
+        $('.question').on('click', '.submit', () => {
+            //only if user has selected an answer (ie app.userAnswer is not undefined) reset timer. 
+            if (app.userAnswer) {
+                clearInterval(timer);
+            }
+        });
+        //when width of the progress bar is zero, clearInterval, completely hide the outer progress bar and push the user to the game over screne.
+        if (progressWidth <= 0) {
+            clearInterval(timer);
+            $('.progressOuter').hide();
+            app.gameOver();
+        }
+    }, 10);
+}
 
 app.loadNextQuestion = (question, correct, wrong) => {
     app.randomizedAnswers = app.randomizeAnswers(correct[app.level], wrong[app.level]);
@@ -126,6 +154,7 @@ app.resetGame = () => {
         app.messageFriend();
         app.askTheAudience();
         $('.usedLifeline').removeClass('usedLifeline');
+        $('h1').removeClass("hiddenOnMobile");
         $('.question').off('click', '.reset');
 
     })
@@ -143,46 +172,7 @@ app.youWon = () => {
     app.resetGame();
 }
 
-app.makeTimer = (timeLeft) => {
 
-    //declare jquery selectors for better performance
-    $countdown = $(".countdown");
-    $progressBar = $(".progressInner");
-
-    //display the initial time remaining on page
-    $countdown.html(`<p>${timeLeft}</p>`);
-    //define the width of the initial progress bar as 100;
-    let progressWidth = 100;
-    //set the width increment as a function of timeLeft.
-    let widthIncrement = progressWidth / timeLeft / 100
-    //define the setInterval function
-    let timer = setInterval(function () {
-        //reduce timeLeft in 0.01 second increments.
-        timeLeft = timeLeft - 1 / 100;
-        //reduce the width of the progress bar the size of the widthIncrement
-        progressWidth = progressWidth - widthIncrement;
-        //display timeLeft on the html
-        $countdown.html(`<p>${Math.round(timeLeft)}</p>`);
-        ///update the width of the progress bar on html
-        $progressBar.width(`${progressWidth}%`);
-        //when timeLeft is less than 1 second, make seconds singular ie. second
-        if (timeLeft < 10) {
-            $countdown.html(`<p>${Math.round(timeLeft * 10) / 10}</p>`);
-        }
-        $('.question').on('click', '.submit', () => {
-            if (app.userAnswer) {
-                clearInterval(timer);
-            }
-        });
-        //when width of the progress bar is zero, clearInterval and move to the next frame.
-        if (progressWidth <= 0) {
-            clearInterval(timer);
-            $('.progressOuter').hide();
-            app.gameOver();
-            // numberGame.makeFrameTwo();
-        }
-    }, 10);
-}
 
 app.loadWidget = () => {
     $('.widgets').html(`
@@ -329,6 +319,7 @@ app.getData = async function () {
 app.init = () => {
     app.getData();
     $('.question').on('click', '.begin', (e) => {
+        $('h1').removeClass("hiddenOnMobile");
         e.preventDefault();
         app.loadWidget();
         app.loadNextQuestion(app.questions, app.correctAnswers, app.incorrectAnswers);
