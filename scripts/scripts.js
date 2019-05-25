@@ -99,10 +99,169 @@ app.makeTimer = (timeLeft) => {
         }
     }, 10);
 }
+//this is a helper function for fifty fifty. It picks two random indices that don't contain the correct answer to remove from the array.
+app.indicesToRemove = () => {
+    //declare an array of all the possible indices
+    let arrayOfIndices = [0, 1, 2, 3];
+    //first remove the correctIndex from the array.
+    arrayOfIndices.splice(app.correctIndex, 1);
+    //then pick a random index and remove it from the array as well.
+    let indextoRemove = Math.floor(Math.random() * 3);
+    arrayOfIndices.splice(indextoRemove, 1);
+    //return the remaining array.
+    return arrayOfIndices
+}
+//this is the fifty fifty lifeline. When user clicks fifty-fifty, it removes two random answers that are not the right answer
+app.fiftyFifty = () => {
+    $('.widgets').on('click', '.fiftyFifty', () => {
+        //call the helper function to pick two indices that will be removed.
+        let indicesToRemove = app.indicesToRemove();
+        //select the two indicesTo be removed and empty their containers.
+        $(`.answer:nth-child(${indicesToRemove[0] + 1})`).empty();
+        $(`.answer:nth-child(${indicesToRemove[1] + 1})`).empty();
+        
+        //once the lifeline has been used, add a class that greys the button out as well as turn off the event listener so the user can't use it again.
+        $('.fiftyFifty').addClass('usedLifeline');
+        $('.widgets').off('click', '.fiftyFifty');
+    })
+}
 
+//this is a helper function for both askFriend and askTheAudeince Widgets. This function controls whether the user will be directed to the right answer. 
+//between levels 0 and 5, the hint is always correct.
+//between levels 5 and 10, the hint is 80% likely to be correct.
+//between levels 10 and 15, the hiny is 50% likely to be correct.
+app.hintAccuracy = () =>{
+    //randomizer is the decision variable that controls whether the user is directed to the right answer.
+    let randomizer = Math.random();
+    if (app.level < 5) {
+        return app.correctIndex;
+    } else if (app.level < 10 && randomizer >= .2) {
+        return app.correctIndex;
+    } else if (app.level >= 10 && randomizer >= .5) {
+        return app.correctIndex;
+    } else {
+        if (app.correctIndex === 0) {
+            return app.correctIndex + 1;
+        } else {
+            return app.correctIndex - 1;
+        }
+    }
+}
+
+//this is the Ask a Friend widget. It creates a pop up that offers the user a hint. Hint accuracy is controlled by the app.hintAccuracy() function.
+app.askFriend = () => {
+    $('.widgets').on('click', '.askFriend', () => {
+        $('body').addClass('preventScrolling');
+        let hintIndex = app.hintAccuracy();
+
+        //once its decided what the hint will be, it is displayed to the user.
+        $('.popup').html(`                
+            <div class="takeOver">
+                <div class="popupBox">
+                    <h4>Message a Friend</h4>
+                    <p><span class="friend">Brent: </span>I'm pretty sure that the correct answer is ${app.randomizedAnswers[hintIndex]}.</p>
+                    <button class="close">Close</button>
+                </div>
+            </div>`);
+        //once the user is done reading the hint, they click "close" to close the popup. Once the button is clicked, the popup is cleared and the event listener is turned off.
+        $('.popup').on('click', '.close', () => {
+            $('body').removeClass('preventScrolling');
+            $('.popup').empty();
+            $('.popup').off('click', '.close')
+        });
+
+        //once the lifeline has been used, add a class that greys the button out as well as turn off the event listener so the user can't use it again.
+        $('.askFriend').addClass('usedLifeline');
+        $('.widgets').off('click', '.askFriend');
+    });
+}
+
+app.askTheAudience = () => {
+    //a helper function to rapidly generate percentages as audience feedback.
+    const getRandomArbitrary = (min, max) => {
+        return Math.floor(Math.random() * (max - min) + min);
+    }
+
+    $('.widgets').on('click', '.askTheAudience', () => {
+        $('body').addClass('preventScrolling');
+        //generate 4 random percentages to be displayed to the user. First percent is limited to 75% so that numbers are more evenly distributed.
+        let percent1 = getRandomArbitrary(0, 76);
+        let percent2 = getRandomArbitrary(0, 101 - percent1);
+        let percent3 = getRandomArbitrary(0, 101 - percent1 - percent2);
+        let percent4 = 100 - percent1 - percent2 - percent3;
+
+        //push the percentages to an array called audiencePoll to later on display in the pop up.
+        let audiencePoll = [percent1, percent2, percent3, percent4];
+
+        //find what the highest percentage is on the array.
+        let maxPercent = Math.max(...audiencePoll);
+
+        //find what index is the maxPercent
+        indexOfMax = audiencePoll.indexOf(maxPercent);
+
+        //remove the highest percentage out of the audiencePoll array, to inject it back based on the app.hintAccuracy() outcome. 
+        audiencePoll.splice(indexOfMax, 1);
+
+        //based on app.hintAccuracy() outcome, hintIndex contains an index that will contain the highest percentage.
+        let hintIndex = app.hintAccuracy();
+        
+        //maxPercent gets injected back into the hintIndex position.
+        audiencePoll.splice(hintIndex, 0, maxPercent);
+
+        //generate the popup html.
+        $('.popup').html(`                
+            <div class="takeOver">
+                <div class="popupBox audienceChart">
+                    <h4>Ask the Audience</h4>
+                    <div class="chartContainer">
+                        <div class="bar0 bar"><p>A</p></div>
+                        <div class="bar1 bar"><p>B</p></div>
+                        <div class="bar2 bar"><p>C</p></div>
+                        <div class="bar3 bar"><p>D</p></div>
+                    </div>
+                    <button>Close</button>
+                </div>
+            </div>`);
+        for (i = 0; i < audiencePoll.length; i++) {
+            $(`.bar${i}`).width(`${audiencePoll[i] / maxPercent * 100}%`);
+            $(`.bar${i}>p`).html(`${audiencePoll[i]}%`);
+        }
+        $('.popup').on('click', 'button', () => {
+            $('body').removeClass('preventScrolling');
+            $('.popup').empty();
+            $('.popup').off('click', 'button')
+        });
+        $('.askTheAudience').addClass('usedLifeline');
+        $('.widgets').off('click', '.askTheAudience');
+    });
+}
+
+app.gameOver = () => {
+    $('.widgets').empty();
+    $('.question').html(`<h2>GAME OVER BRAH!</h2><button class="reset">Play Again</button>`)
+    app.resetGame();
+}
+
+app.resetGame = () => {
+    $('.question').on('click', '.reset', () => {
+        $(`ul li:nth-child(${app.level + 1})`).removeClass('currentQuestion');
+        app.level = 0;
+        app.questions = [];
+        app.correctAnswers = [];
+        app.incorrectAnswers = [];
+        app.randomizedAnswers = [];
+        app.correctIndex = 0;
+        app.loadStartScreen();
+        app.getData();
+        $('.usedLifeline').removeClass('usedLifeline');
+        $('h1').removeClass("hiddenOnMobile");
+        $('.question').off('click', '.reset');
+
+    })
+}
 app.loadNextQuestion = (question, correct, wrong) => {
     app.randomizedAnswers = app.randomizeAnswers(correct[app.level], wrong[app.level]);
-    app.makeTimer(100);
+    app.makeTimer(10);
     console.log(`correct answer is: ${app.correctAnswers[app.level]}`);
     let frame = `<h2>${question[app.level]}</h2>
             <form action="">
@@ -131,34 +290,6 @@ app.loadNextQuestion = (question, correct, wrong) => {
     $(`ul li:nth-child(${app.level})`).removeClass('currentQuestion');
 
 }
-
-
-app.gameOver = () => {
-    $('.widgets').empty();
-    $('.question').html(`<h2>GAME OVER BRAH!</h2><button class="reset">Play Again</button>`)
-    app.resetGame();
-}
-
-app.resetGame = () => {
-    $('.question').on('click', '.reset', () => {
-        $(`ul li:nth-child(${app.level + 1})`).removeClass('currentQuestion');
-        app.level = 0;
-        app.questions = [];
-        app.correctAnswers = [];
-        app.incorrectAnswers = [];
-        app.randomizedAnswers = [];
-        app.correctIndex = 0;
-        app.loadStartScreen();
-        app.getData();
-        app.fiftyFifty();
-        app.messageFriend();
-        app.askTheAudience();
-        $('.usedLifeline').removeClass('usedLifeline');
-        $('h1').removeClass("hiddenOnMobile");
-        $('.question').off('click', '.reset');
-
-    })
-}
 app.loadStartScreen = () => {
     let frame = `<h2> Who wants to be a developer</h2>
                     <p>Lorem, ipsum dolor sit amet consectetur adipisicing elit.Officia dolores reprehenderit, facerequibusdam nihil modi error quia odio cumque minus!</p>
@@ -183,120 +314,13 @@ app.loadWidget = () => {
         <ul class="lifelines">
             <li><button class="fiftyFifty"><i class="fas fa-divide"></i></button></li>
             <li><button class="askTheAudience"><i class="fas fa-chart-bar"></i></button></li>
-            <li><button class="messageFriend"><i class="far fa-comment"></i></button></li> 
+            <li><button class="askFriend"><i class="far fa-comment"></i></button></li> 
         </ul>
     `)
-}
-
-//this is a helper function for fifty fifty. It picks two random indices that don't contain the correct answer to remove.
-app.indicesToRemove = () => {
-    let dummyArray = [0, 1, 2, 3];
-    dummyArray.splice(app.correctIndex, 1);
-    let indextoRemove = Math.floor(Math.random() * 3);
-    dummyArray.splice(indextoRemove, 1);
-    return dummyArray
-}
-app.fiftyFifty = () => {
-    $('.widgets').on('click', '.fiftyFifty', () => {
-        let indicesToRemove = app.indicesToRemove();
-        console.log(indicesToRemove)
-        $(`.answer:nth-child(${indicesToRemove[0] + 1})`).empty();
-        $(`.answer:nth-child(${indicesToRemove[1] + 1})`).empty();
-        $('.fiftyFifty').addClass('usedLifeline');
-        $('.widgets').off('click', '.fiftyFifty');
-    })
-}
-app.messageFriend = () => {
-    $('.widgets').on('click', '.messageFriend', () => {
-        let randomizer = Math.random();
-        let hintIndex = 0;
-        if (app.level < 5) {
-            hintIndex = app.correctIndex;
-        } else if (app.level < 10 && randomizer >= .2) {
-            hintIndex = app.correctIndex;
-        } else if (app.level >= 10 && randomizer >= .5) {
-            hintIndex = app.correctIndex;
-        } else {
-            if (app.correctIndex === 0) {
-                hintIndex = app.correctIndex + 1;
-            } else {
-                hintIndex = app.correctIndex - 1;
-            }
-        }
-        $('.popup').html(`                
-            <div class="takeOver">
-                <div class="popupBox">
-                    <h4>Message a Friend</h4>
-                    <p><span class="friend">Brent: </span>I'm pretty sure that the correct answer is ${app.randomizedAnswers[hintIndex]}.</p>
-                    <button>Close</button>
-                </div>
-            </div>`);
-        $('.popup').on('click', 'button', () => {
-            $('.popup').empty();
-            $('.popup').off('click', 'button')
-        });
-        $('.messageFriend').addClass('usedLifeline');
-        $('.widgets').off('click', '.messageFriend');
-    });
-}
-app.askTheAudience = () => {
-    const getRandomArbitrary = (min, max) => {
-        return Math.floor(Math.random() * (max - min) + min);
-    }
-    $('.widgets').on('click', '.askTheAudience', () => {
-        let randomizer = Math.random();
-        let percent1 = getRandomArbitrary(0, 76);
-        let percent2 = getRandomArbitrary(0, 101 - percent1);
-        let percent3 = getRandomArbitrary(0, 101 - percent1 - percent2);
-        let percent4 = 100 - percent1 - percent2 - percent3;
-        console.log(percent1, percent2, percent3, percent4);
-
-        let audiencePoll = [percent1, percent2, percent3, percent4];
-        let maxPercent = Math.max(...audiencePoll);
-        indexOfMax = audiencePoll.indexOf(maxPercent);
-        audiencePoll.splice(indexOfMax, 1);
-        console.log(audiencePoll);
-
-        if (app.level < 5) {
-            hintIndex = app.correctIndex;
-        } else if (app.level < 10 && randomizer >= .2) {
-            hintIndex = app.correctIndex;
-        } else if (app.level >= 10 && randomizer >= .5) {
-            hintIndex = app.correctIndex;
-        } else {
-            if (app.correctIndex === 0) {
-                hintIndex = app.correctIndex + 1;
-            } else {
-                hintIndex = app.correctIndex - 1;
-            }
-        }
-        audiencePoll.splice(hintIndex, 0, maxPercent);
-        console.log(audiencePoll);
-
-        $('.popup').html(`                
-            <div class="takeOver">
-                <div class="popupBox audienceChart">
-                    <h4>Ask the Audience</h4>
-                    <div class="chartContainer">
-                        <div class="bar0 bar"><p>A</p></div>
-                        <div class="bar1 bar"><p>B</p></div>
-                        <div class="bar2 bar"><p>C</p></div>
-                        <div class="bar3 bar"><p>D</p></div>
-                    </div>
-                    <button>Close</button>
-                </div>
-            </div>`);
-        for (i = 0; i < audiencePoll.length; i++) {
-            $(`.bar${i}`).width(`${audiencePoll[i] / maxPercent * 100}%`);
-            $(`.bar${i}>p`).html(`${audiencePoll[i]}%`);
-        }
-        $('.popup').on('click', 'button', () => {
-            $('.popup').empty();
-            $('.popup').off('click', 'button')
-        });
-        $('.askTheAudience').addClass('usedLifeline');
-        $('.widgets').off('click', '.askTheAudience');
-    });
+    $('.widgets').off();
+    app.fiftyFifty();
+    app.askFriend();
+    app.askTheAudience();
 }
 
 
@@ -354,9 +378,6 @@ app.init = () => {
             }, 1000);
         }
     })
-    app.fiftyFifty();
-    app.messageFriend();
-    app.askTheAudience();
 }
 
 
