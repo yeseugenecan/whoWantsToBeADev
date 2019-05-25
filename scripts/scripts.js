@@ -240,7 +240,7 @@ app.askTheAudience = () => {
                         <div class="bar3 bar"><p>D</p></div>
                     </div>
                     <p>The audience thinks <span class>${app.randomizedAnswers[hintIndex]}</span> is the right answer</p>
-                    <button>Close</button>
+                    <button class="close">Close</button>
                 </div>
             </div>`);
 
@@ -254,10 +254,10 @@ app.askTheAudience = () => {
         //color the audience favourite orange.
         $(`.bar${hintIndex}`).css("background", "#f39c12");
         //once the user is done reading the hint, they click "close" to close the popup. Once the button is clicked, the popup is cleared and the event listener is turned off.
-        $('.popup').on('click', 'button', () => {
+        $('.popup').on('click', '.close', () => {
             $('body').removeClass('preventScrolling');
             $('.popup').empty();
-            $('.popup').off('click', 'button')
+            $('.popup').off('click', '.close')
             app.isPaused = false;
         });
 
