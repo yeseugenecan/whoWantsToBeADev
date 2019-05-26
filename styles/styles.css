@@ -662,7 +662,7 @@ button:hover, button:focus {
     margin-bottom: 20px;
   }
   aside ul {
-    height: auto;
+    min-height: 0;
     margin-top: 0;
   }
   aside li {
