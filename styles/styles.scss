@@ -74,7 +74,7 @@ aside {
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        height: 70vh;
+        min-height: 70vh;
     }
 
     li {

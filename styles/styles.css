@@ -318,7 +318,7 @@ aside ul {
   -webkit-box-pack: justify;
       -ms-flex-pack: justify;
           justify-content: space-between;
-  height: 70vh;
+  min-height: 70vh;
 }
 
 aside li {
