@@ -357,7 +357,7 @@ app.loadNextQuestion = (question, correct, wrong) => {
 // when called loads the start screen.
 app.loadStartScreen = () => {
     let frame = `<h2>Welcome</h2>
-                <p>Welcome to Who Wants to be a Developer! Answer all 15 questions to prove your computer science skills. If you get stuck, don't forget to use your lifelines – 50/50, Poll the Audience, and Ask a Friend.</p>
+                <p>Welcome to Who Wants to be a Developer! Answer all 15 questions to prove your computer science skills. If you get stuck, don't forget to use your lifelines – 50/50, Ask the Audience, and Ask a Friend.</p>
                     <button class="loading">Loading <i class="fas fa-long-arrow-alt-right"></i></button>`
     app.$question.html(frame);
 }
@@ -371,9 +371,9 @@ app.loadWidgets = () => {
             <div class="countdown"><p>60</p></div>
         </div>
         <ul class="lifelines">
-            <li><button class="fiftyFifty" aria-label="fifty fifty lifeline"><i class="fas fa-divide"></i></button></li>
-            <li><button class="askTheAudience" aria-label="ask the audience lifeline"><i class="fas fa-chart-bar"></i></button></li>
-            <li><button class="askFriend" aria-label="ask a friend lifeline"><i class="far fa-comment"></i></button></li> 
+            <li><button class="fiftyFifty" aria-label="fifty fifty lifeline" title="Fifty Fifty"><i class="fas fa-divide"></i></button></li>
+            <li><button class="askTheAudience" aria-label="ask the audience lifeline" title="Ask the Audience"><i class="fas fa-chart-bar"></i></button></li>
+            <li><button class="askFriend" aria-label="ask a friend lifeline" title="Ask a Audience"><i class="far fa-comment"></i></button></li> 
         </ul>
     `)
     //before turning on any widget, make sure all their event listeners are off.
