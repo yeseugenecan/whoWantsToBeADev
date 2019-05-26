@@ -463,7 +463,7 @@ app.init = () => {
                     //color the answer green because the user was right.
                     $("input[name=answers]:checked ~ label").css('background', '#49E68D');
                     //show that the user was correct for a second.
-                    setTimeout(app.youWon(), 1000);
+                    setTimeout(app.youWon, 1000);
                 }
                 //if user is right, reveal that they got the question right, then move them to the you won page.
                 else if (app.correctIndex === parseInt(app.userAnswer, 10)) {
@@ -486,7 +486,7 @@ app.init = () => {
                         //reveal the right answer to the user.
                         $(`.answer:nth-child(${app.correctIndex + 1}) > label`).css('background', '#49E68D');
                         //and finally take them to the game over page after a second.
-                        setTimeout(() => { app.gameOver() }, 1000)
+                        setTimeout(app.gameOver, 1000)
                     }, 1000);
                 }
             }, 1000);
