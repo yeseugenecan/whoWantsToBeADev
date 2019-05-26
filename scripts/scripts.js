@@ -32,6 +32,10 @@ app.randomizedAnswers = [];
 app.correctIndex;
 app.userAnswer;
 app.isPaused = false;
+app.$question;
+app.$widgets;
+app.$popup;
+app.$body;
 
 //this function takes in a the correct answer as well as the array of wrong answers and randomly injects the correct answer on the array of wrong answers.
 app.randomizeAnswers = (correct, wrongAnswer) => {
@@ -75,7 +79,7 @@ app.makeTimer = (timeLeft) => {
             $countdown.html(`<p>${Math.round(timeLeft * 10) / 10}</p>`);
         }
         //on user clicking submit,
-        $('.question').on('click', '.submit', () => {
+        app.$question.on('click', '.submit', () => {
             //only if user has selected an answer (ie app.userAnswer is not undefined) reset timer. 
             if (app.userAnswer) {
                 clearInterval(timer);
@@ -103,7 +107,7 @@ app.indicesToRemove = () => {
 }
 //this is the fifty fifty lifeline. When user clicks fifty-fifty, it removes two random answers that are not the right answer
 app.fiftyFifty = () => {
-    $('.widgets').on('click', '.fiftyFifty', () => {
+    app.$widgets.on('click', '.fiftyFifty', () => {
         //call the helper function to pick two indices that will be removed.
         let indicesToRemove = app.indicesToRemove();
         //select the two indicesTo be removed and empty their containers.
@@ -112,7 +116,7 @@ app.fiftyFifty = () => {
         
         //once the lifeline has been used, add a class that greys the button out as well as turn off the event listener so the user can't use it again.
         $('.fiftyFifty').addClass('usedLifeline');
-        $('.widgets').off('click', '.fiftyFifty');
+        app.$widgets.off('click', '.fiftyFifty');
     })
 }
 
@@ -143,14 +147,14 @@ app.hintAccuracy = () =>{
 
 //this is the Ask a Friend widget. It creates a pop up that offers the user a hint. Hint accuracy is controlled by the app.hintAccuracy() function.
 app.askFriend = () => {
-    $('.widgets').on('click', '.askFriend', () => {
+    app.$widgets.on('click', '.askFriend', () => {
         //prevent scrolling when the pop up appears
-        $('body').addClass('preventScrolling');
+        app.$body.addClass('preventScrolling');
         let hintIndex = app.hintAccuracy();
 
         let response = app.friendsResponse(app.level);
         //once its decided what the hint will be, it is displayed to the user.
-        $('.popup').html(`
+        app.$popup.html(`
             <div class="takeOver">
                 <div class="popupBox askAFriendBox">
                     <h4>Ask a Friend</h4>
@@ -164,23 +168,23 @@ app.askFriend = () => {
             </div>`);
         app.isPaused = true;
         //once the user is done reading the hint, they click "close" to close the popup. Once the button is clicked, the popup is cleared and the event listener is turned off.
-        $('.popup').on('click', '.close', () => {
-            $('body').removeClass('preventScrolling');
-            $('.popup').empty();
-            $('.popup').off('click', '.close')
+        app.$popup.on('click', '.close', () => {
+            app.$body.removeClass('preventScrolling');
+            app.$popup.empty();
+            app.$popup.off('click', '.close')
             app.isPaused = false;
         });
 
         //once the lifeline has been used, add a class that greys the button out as well as turn off the event listener so the user can't use it again.
         $('.askFriend').addClass('usedLifeline');
-        $('.widgets').off('click', '.askFriend');
+        app.$widgets.off('click', '.askFriend');
     });
 }
 
 //this is a helper function for ask a friend lifeline. It that adds a layer of humanity to our AI.
 app.friendsResponse = (level) =>{
     if(level <5){
-        return "Why are you wasting my valuable time?. The answer obviously is: "
+        return "Why are you wasting my valuable time?. The answer is obviously: "
     }
     if(level <10){
         return "While I'm not 100% sure, I think the correct answer is:"
@@ -194,9 +198,9 @@ app.askTheAudience = () => {
         return Math.floor(Math.random() * (max - min) + min);
     }
 
-    $('.widgets').on('click', '.askTheAudience', () => {
+    app.$widgets.on('click', '.askTheAudience', () => {
         //prevent scrolling when the pop up appears
-        $('body').addClass('preventScrolling');
+        app.$body.addClass('preventScrolling');
         //generate 4 random percentages to be displayed to the user. First percent is limited to 75% so that numbers are more evenly distributed.
         let percent1 = getRandomArbitrary(0, 76);
         let percent2 = getRandomArbitrary(0, 101 - percent1);
@@ -222,7 +226,7 @@ app.askTheAudience = () => {
         audiencePoll.splice(hintIndex, 0, maxPercent);
 
         //generate the popup html.
-        $('.popup').html(`                
+        app.$popup.html(`                
             <div class="takeOver">
                 <div class="popupBox audienceChart">
                     <h4>Ask the Audience</h4>
@@ -247,23 +251,23 @@ app.askTheAudience = () => {
         //color the audience favourite orange.
         $(`.bar${hintIndex}`).css("background", "#f39c12");
         //once the user is done reading the hint, they click "close" to close the popup. Once the button is clicked, the popup is cleared and the event listener is turned off.
-        $('.popup').on('click', '.close', () => {
-            $('body').removeClass('preventScrolling');
-            $('.popup').empty();
-            $('.popup').off('click', '.close')
+        app.$popup.on('click', '.close', () => {
+            app.$body.removeClass('preventScrolling');
+            app.$popup.empty();
+            app.$popup.off('click', '.close')
             app.isPaused = false;
         });
 
         //once the lifeline has been used, add a class that greys the button out as well as turn off the event listener so the user can't use it again.
         $('.askTheAudience').addClass('usedLifeline');
-        $('.widgets').off('click', '.askTheAudience');
+        app.$widgets.off('click', '.askTheAudience');
     });
 }
 
 //when called, loads the game over page.
 app.gameOver = () => {
-    $('.widgets').empty();
-    $('.question').html(`<h2>Game Over!</h2>
+    app.$widgets.empty();
+    app.$question.html(`<h2>Game Over!</h2>
     <p>Some people just aren't cut out to be developers.</p>
     <button class="reset">Play Again</button>`)
     //if .reset is clicked, reset the game 
@@ -271,15 +275,15 @@ app.gameOver = () => {
 }
 //when called, loads the you won page.
 app.youWon = () => {
-    $('.widgets').empty();
-    $('.question').html(`<h2>Congratulations!</h2><p>Looks like you are an awesome developer!</p><button class="reset">Play Again</button>`)
+    app.$widgets.empty();
+    app.$question.html(`<h2>Congratulations!</h2><p>Looks like you are an awesome developer!</p><button class="reset">Play Again</button>`)
     //if .reset is clicked, reset the game 
     app.resetGame();
 }
 
 //when called activates the event listener to reset the game. 
 app.resetGame = () => {
-    $('.question').on('click', '.reset', () => {
+    app.$question.on('click', '.reset', () => {
         //remove all the styling that gives indication of the current question.
         $(`aside li:nth-child(${app.level + 1})`).removeClass('currentQuestion');
         
@@ -302,10 +306,10 @@ app.resetGame = () => {
         $('h1').removeClass("hiddenOnMobile");
 
         // ensure that widgets bar is shown
-        $('.widgets').show();
+        app.$widgets.show();
 
         //turn off the event listener for .reset button.
-        $('.question').off('click', '.reset');
+        app.$question.off('click', '.reset');
     })
 }
 
@@ -343,7 +347,7 @@ app.loadNextQuestion = (question, correct, wrong) => {
             <button class="submit">Submit <i class="fas fa-long-arrow-alt-right" aria-label="Begin"></i></button>`
 
     //load the question to the user.
-    $('.question').html(frame);
+    app.$question.html(frame);
     //iterate the class of currentQuestion on the next list item so that next list item is highlighted.
     $(`aside li:nth-child(${app.level + 1})`).addClass('currentQuestion');
     $(`aside li:nth-child(${app.level})`).removeClass('currentQuestion');
@@ -355,13 +359,13 @@ app.loadStartScreen = () => {
     let frame = `<h2>Welcome</h2>
                 <p>Welcome to Who Wants to be a Developer! Answer all 15 questions to prove your computer science skills. If you get stuck, don't forget to use your lifelines – 50/50, Poll the Audience, and Ask a Friend.</p>
                     <button class="loading">Loading <i class="fas fa-long-arrow-alt-right"></i></button>`
-    $('.question').html(frame);
+    app.$question.html(frame);
 }
 
 
 // when called loads the widgets bar along with all the individual widget listeners. 
 app.loadWidgets = () => {
-    $('.widgets').html(`
+    app.$widgets.html(`
         <div class="progressOuter">
             <div class="progressInner"></div> 
             <div class="countdown"><p>60</p></div>
@@ -373,7 +377,7 @@ app.loadWidgets = () => {
         </ul>
     `)
     //before turning on any widget, make sure all their event listeners are off.
-    $('.widgets').off();
+    app.$widgets.off();
 
     //turn on all the event listeners for all the widgets.
     app.fiftyFifty();
@@ -420,10 +424,15 @@ app.getData = async function () {
 app.init = () => {
     //get the Data from the API
     app.getData();
+    // cache selectors
+    app.$question = $('.question');
+    app.$widgets = $('.widgets');
+    app.$popup = $('.popup');
+    app.$body = $('body')
     // preload images
     $('<img />').attr('src', './assets/8BitBrent.png').appendTo('body').css('display', 'none');
     //when user clicks begin, do the following:
-    $('.question').on('click', '.begin', (e) => {
+    app.$question.on('click', '.begin', (e) => {
         //prevent default behaviour of the button.
         e.preventDefault();
         $('h1').addClass("hiddenOnMobile");
@@ -434,7 +443,7 @@ app.init = () => {
         app.loadNextQuestion(app.questions, app.correctAnswers, app.incorrectAnswers);
     })
 
-    $('.question').on('click', '.submit', (e) => {
+    app.$question.on('click', '.submit', (e) => {
         //prevent default behaviour of the button.
         e.preventDefault();
         //store the index of the value of the input the user checked when they submitted the button. 
@@ -443,7 +452,7 @@ app.init = () => {
         if (app.userAnswer) {
             //hide the submit button so user can't click submit again while waiting to see if they got the right answer.
             $('.submit').hide();
-            $('.widgets').hide();
+            app.$widgets.hide();
 
              //color the users choice to orange before setting a timeout.
             $("input[name=answers]:checked ~ label").css('background', '#f39c12');
@@ -466,7 +475,7 @@ app.init = () => {
                         app.level++;
                         //take the user to the next question.
                         app.loadNextQuestion(app.questions, app.correctAnswers, app.incorrectAnswers);
-                        $('.widgets').show();
+                        app.$widgets.show();
                     }, 1000);
                 }
                 else {

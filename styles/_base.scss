@@ -1,0 +1,52 @@
+@mixin mainFont {
+    font-family: 'Nunito Sans',
+    sans-serif;
+    color: #fff;
+    font-weight: 300;
+}
+@mixin headerFont {
+    font-family: 'Nunito',
+    sans-serif;
+    font-weight: 600;
+}
+
+html {
+    font-size: 125%;
+}
+
+
+p,
+label {
+    @include mainFont;
+}
+
+h1,
+h2,
+h3,
+h4,
+input,
+button {
+    @include headerFont;
+}
+
+h1,
+h2,
+h3,
+h4,
+li,
+p {
+    margin: 0;
+    color: #fff;
+}
+
+h2 {
+    font-size: 2rem;
+}
+
+h3 {
+    font-size: 1.2rem;
+}
+
+img {
+    width: 100%;
+}

@@ -183,15 +183,21 @@ html {
   font-size: 125%;
 }
 
-body {
-  font-size: 1rem;
-  background: -webkit-gradient(linear, left top, left bottom, from(#1f1f2e), to(#0a0f15));
-  background: linear-gradient(#1f1f2e, #0a0f15);
-  min-height: 100vh;
+p,
+label {
+  font-family: 'Nunito Sans', sans-serif;
+  color: #fff;
+  font-weight: 300;
 }
 
-.preventScrolling {
-  overflow: hidden;
+h1,
+h2,
+h3,
+h4,
+input,
+button {
+  font-family: 'Nunito', sans-serif;
+  font-weight: 600;
 }
 
 h1,
@@ -201,24 +207,30 @@ h4,
 li,
 p {
   margin: 0;
-  font-family: 'Nunito Sans', sans-serif;
   color: #fff;
 }
 
 h2 {
-  font-family: 'Nunito', sans-serif;
-  font-weight: 600;
   font-size: 2rem;
 }
 
 h3 {
   font-size: 1.2rem;
-  font-family: 'Nunito', sans-serif;
-  font-weight: 600;
 }
 
 img {
   width: 100%;
+}
+
+body {
+  font-size: 1rem;
+  background: -webkit-gradient(linear, left top, left bottom, from(#1f1f2e), to(#0a0f15));
+  background: linear-gradient(#1f1f2e, #0a0f15);
+  min-height: 100vh;
+}
+
+.preventScrolling {
+  overflow: hidden;
 }
 
 header {
@@ -251,15 +263,6 @@ footer {
 footer p {
   color: #4f5165;
   font-size: .8rem;
-}
-
-label {
-  font-family: 'Nunito Sans', sans-serif;
-}
-
-input,
-button {
-  font-family: 'Nunito', sans-serif;
 }
 
 h1 {
@@ -749,6 +752,17 @@ button:hover, button:focus {
   }
   .answer {
     width: 46%;
+    min-height: 39px;
+  }
+  .answer label {
+    padding: 5px 35px 5px 25px;
+    font-size: .8rem;
+  }
+  .answer label::before {
+    top: 3px;
+  }
+  .answer input:checked ~ label::after {
+    top: 3px;
   }
   .askAFriendBox {
     display: -webkit-box;

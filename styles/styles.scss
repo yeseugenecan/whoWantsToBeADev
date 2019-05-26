@@ -1,49 +1,21 @@
 @import "_setup.scss";
+@import "_base.scss";
 
-* {
-    // border: 1px solid white;
-}
+// Colors
+$detailing: #4f5165;
+$background: #1f1f2e;
+$accent: #50d8d7;
+$secondary: #547aa5;
 
-html {
-    font-size: 125%;
-}
 
 body {
     font-size: 1rem;
-    background: linear-gradient(#1f1f2e, #0a0f15);
+    background: linear-gradient($background, #0a0f15);
     min-height: 100vh;
-
 }
 
 .preventScrolling {
     overflow: hidden;
-}
-
-h1,
-h2,
-h3,
-h4,
-li,
-p {
-    margin: 0;
-    font-family: 'Nunito Sans', sans-serif;
-    color: #fff;
-}
-
-h2 {
-    font-family: 'Nunito', sans-serif;
-    font-weight: 600;
-    font-size: 2rem;
-}
-
-h3 {
-    font-size: 1.2rem;
-    font-family: 'Nunito', sans-serif;
-    font-weight: 600;
-}
-
-img {
-    width: 100%;
 }
 
 header {
@@ -59,22 +31,14 @@ main {
     padding-left: 50px;
     width: 100%;
 }
+
 footer {
     padding: 30px 0 20px;
     
     p {
-        color: #4f5165;
+        color: $detailing;
         font-size: .8rem;
     }
-}
-
-label {
-    font-family: 'Nunito Sans', sans-serif;
-}
-
-input,
-button {
-    font-family: 'Nunito', sans-serif;
 }
 
 h1 {
@@ -103,7 +67,7 @@ aside {
     flex: 0 0 300px;
     display: flex;
     flex-direction: column;
-    border-right: solid 1px #4f5165;
+    border-right: solid 1px $detailing;
 
     ul {
         padding: 0;
@@ -128,7 +92,7 @@ aside {
 
         h3 {
             width: 50%;
-            border-right: solid 3px #4f5165;
+            border-right: solid 3px $detailing;
         }
     }
 
@@ -153,8 +117,8 @@ aside {
     width: 46%;
     margin: 2%;
     min-height: 48px;
-    border: 3px solid #547aa5;
-    background: #1f1f2e;
+    border: 3px solid $secondary;
+    background: $background;
     border-radius: 10px;
 
     input {
@@ -177,8 +141,8 @@ aside {
             right: 5px;
             height: 20px;
             width: 20px;
-            border: 3px solid #50d8d7;
-            background: #50d8d7;
+            border: 3px solid $accent;
+            background: $accent;
             border-radius: 50%;
         }
     }
@@ -200,22 +164,22 @@ aside {
             right: 5px;
             height: 20px;
             width: 20px;
-            border: 3px solid #547aa5;
-            background: #1f1f2e;
+            border: 3px solid $secondary;
+            background: $background;
             border-radius: 50%;
         }
     }
 }
 
 button {
-    background-color: #50d8d7;
+    background-color: $accent;
     border: none;
     padding: 5px 20px;
     border-radius: 20px;
 
     &:hover,
     &:focus {
-        background-color: darken(#50d8d7, 20%);
+        background-color: darken($accent, 20%);
     }
 }
 
@@ -241,7 +205,7 @@ button {
             height: 50px;
             border-radius: 50%;
             background: none;
-            border: 2px solid #547aa5;
+            border: 2px solid $secondary;
             padding: 0;
 
             &:not(.usedLifeline):hover,
@@ -274,7 +238,7 @@ button {
     overflow: hidden;
     border-radius: 50%;
     max-width: 125px;
-    border: 3px solid #547aa5;
+    border: 3px solid $secondary;
     margin: 0 auto;
 
     img {
@@ -289,16 +253,16 @@ button {
     box-sizing: content-box;
     position: relative;
     background: none;
-    border: 2px solid #547aa5;
+    border: 2px solid $secondary;
     overflow: hidden;
 }
 
 .progressInner {
     width: 100%;
     height: 46px;
-    background: linear-gradient(left, #ff4a75, #50d8d7);
+    background: linear-gradient(left, #ff4a75, $accent);
     border-radius: 25px;
-    border: solid 1px #1f1f2e;
+    border: solid 1px $background;
 }
 
 .countdown {
@@ -323,8 +287,8 @@ button {
 .popupBox {
     width: 500px;
     margin: 20px 20px;
-    background: #1f1f2e;
-    border: solid 2px #4f5165;
+    background: $background;
+    border: solid 2px $detailing;
     border-radius: 25px;
     text-align: center;
     z-index: 101;
@@ -345,7 +309,7 @@ button {
 .audienceChart .bar {
     width: 100%;
     height: 25px;
-    background-color: #50d8d7;
+    background-color: $accent;
     text-align: center;
     border-radius: 0 5px 5px 0;
     position: relative;
@@ -425,7 +389,7 @@ button {
     aside {
         flex: 1 1 100%;
         border-right: none;
-        border-bottom: solid 1px #4f5165;
+        border-bottom: solid 1px $detailing;
         margin-bottom: 20px;
 
         ul {
@@ -540,6 +504,20 @@ button {
 
     .answer {
         width: 46%;
+        min-height: 39px;
+
+        label {
+            padding: 5px 35px 5px 25px;
+            font-size: .8rem;
+
+            &::before {
+                top: 3px;
+            }
+        }
+
+        input:checked~label::after {
+            top: 3px;
+        }
     }
 
     .askAFriendBox {
