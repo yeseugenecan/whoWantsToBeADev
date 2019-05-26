@@ -373,7 +373,7 @@ app.loadWidgets = () => {
         <ul class="lifelines">
             <li><button class="fiftyFifty" aria-label="fifty fifty lifeline" title="Fifty Fifty"><i class="fas fa-divide"></i></button></li>
             <li><button class="askTheAudience" aria-label="ask the audience lifeline" title="Ask the Audience"><i class="fas fa-chart-bar"></i></button></li>
-            <li><button class="askFriend" aria-label="ask a friend lifeline" title="Ask a Audience"><i class="far fa-comment"></i></button></li> 
+            <li><button class="askFriend" aria-label="ask a friend lifeline" title="Ask a Friend"><i class="far fa-comment"></i></button></li> 
         </ul>
     `)
     //before turning on any widget, make sure all their event listeners are off.
