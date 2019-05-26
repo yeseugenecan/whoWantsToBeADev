@@ -301,6 +301,9 @@ app.resetGame = () => {
         //remove class that hides the logo to display on the start screen.
         $('h1').removeClass("hiddenOnMobile");
 
+        // ensure that widgets bar is shown
+        $('.widgets').show();
+
         //turn off the event listener for .reset button.
         $('.question').off('click', '.reset');
     })
@@ -417,6 +420,8 @@ app.getData = async function () {
 app.init = () => {
     //get the Data from the API
     app.getData();
+    // preload images
+    $('<img />').attr('src', './assets/8BitBrent.png').appendTo('body').css('display', 'none');
     //when user clicks begin, do the following:
     $('.question').on('click', '.begin', (e) => {
         //prevent default behaviour of the button.
